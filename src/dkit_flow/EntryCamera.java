@@ -9,6 +9,12 @@ package dkit_flow;
  *
  * @author Kris
  */
+/* class representing camera type reader
+   with two read methods:
+- read(String); reads String as an input
+-read(String Array) reads all elements in the array
+and a send() method acivating CarId in the ParkingSystem
+*/
 public class EntryCamera {
     String carID;       
     ParkingSystem dkit;                  // pointer to the ParkingSystem Object

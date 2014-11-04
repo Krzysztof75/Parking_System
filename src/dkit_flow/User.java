@@ -9,9 +9,13 @@ package dkit_flow;
  *
  * @author Kris
  */
+/* this object lets us operate all the data about the Users of the parking system
+
+
+*/
 public class User {
-    private String carID;
-    private boolean isSubscriber;
+    private String carID;                 // car ID
+    private boolean isSubscriber;         // true - sets do Subscriber
 
     /**
      * @return the carID

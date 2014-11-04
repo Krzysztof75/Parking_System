@@ -14,10 +14,13 @@ public class Dkit_flowTest {
     /**
      * @param args the command line arguments
      */
+    /* 
+    Testing class 
+    */
     static String [] incomingTrafficEntry1 = new String[]{"11D121222","12H12543","02Y34567","04Y34567"};
     static String [] incomingTrafficEntry2 = new String[]{"11D121452","12H12549","02B11567","0134527"};
-    static String [] outgoingTraffic1 = new String[]{"11D121222","12H12543","02Y34567"};
-    static String [] outgoingTraffic2 = new String[]{"11D121452","12H12549","02B11567"};
+    static String [] outgoingTraffic1 = new String[]{"11D121222","12H12543","02Y34567","02G13425"};
+    static String [] outgoingTraffic2 = new String[]{"11D121452","12H12549","02B11567","02G13425"};
     
     public static void main(String[] args) {
         // TODO code application logic here
@@ -28,13 +31,7 @@ public class Dkit_flowTest {
         ExitCamera camExit1 = new ExitCamera(dkit);
         ExitCamera camExit2 = new ExitCamera(dkit);
         Panel p1 = new Panel(dkit);
-        p1.setPanelName("panel nr1");
         Panel p2 = new Panel(dkit);
-        p2.setPanelName("panel nr2");
-        Panel p3 = new Panel(dkit);
-        p3.setPanelName("panel nr3");
-        Panel p4 = new Panel(dkit);
-        p4.setPanelName("panel nr4");
         Gate gEntry1 = new Gate(dkit);
         gEntry1.setGateName("Entrance nr1");
         Gate gEntry2 = new Gate(dkit);
@@ -47,8 +44,6 @@ public class Dkit_flowTest {
         
         dkit.registerPanel(p1);
         dkit.registerPanel(p2);
-        dkit.registerPanel(p3);
-        dkit.registerPanel(p4);
         dkit.registerGate(gEntry1);
         dkit.registerGate(gEntry2);
         dkit.registerGate(gExit1);
