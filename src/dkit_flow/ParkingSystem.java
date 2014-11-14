@@ -11,9 +11,9 @@ import java.util.ArrayList;
  *
  * @author Kris
  */
-public class ParkingSystem {
+public class ParkingSystem implements Parkable{
     
-    private ArrayList<Panel> panels;      // array holding references to the display panels
+    private ArrayList<Displayable> panels;      // array holding references to the display panels
     private ArrayList<Gate> gates;
     private final static int totalCount = 400;         // number of parking spaces
     private static int freeSpace = totalCount;                      // number of ramaining free spaces
@@ -21,25 +21,33 @@ public class ParkingSystem {
     
     
     
-    public ParkingSystem(){
+    public ParkingSystem() {
         panels = new ArrayList<>();
         gates = new ArrayList<>();
         user = new User();
     }
     
-   public void registerPanel(Panel p){
+
+   public void registerDisplayPanel(Displayable p){
        panels.add(p);
+   }
+   
+   public void removeDisplayPanel(Displayable p){
+       panels.remove(p);
+   }
+   
+   public void updateDisplayable(int freeSpace){
+       for(Displayable panel : panels)
+           panel.update(freeSpace);
    }
    
    public void registerGate(Gate g){
        gates.add(g);
    }
-    
-   public void updatePanels(int freeSpace){
-       for(Panel panel : panels)
-           panel.update(freeSpace);
+   public void removeGate(Gate g){
+       gates.remove(g);
    }
-  
+   
     public void setCarID(EntryCamera c){
         user.setCarID(c.carID);
         // verify
@@ -62,7 +70,7 @@ public class ParkingSystem {
     
     public void setFreeSpaces(int a){
         freeSpace += a;
-        updatePanels(freeSpace);
+        updateDisplayable(freeSpace);
         
     }
     public int getFreeSpaces(){

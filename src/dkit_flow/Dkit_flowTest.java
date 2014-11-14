@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 package dkit_flow;
-
+///////////////////////////
 /**
  *
  * @author Kris
@@ -25,13 +25,16 @@ public class Dkit_flowTest {
     public static void main(String[] args) {
         // TODO code application logic here
         
+        
+        
         ParkingSystem dkit = new ParkingSystem();
         EntryCamera camEntry1 = new EntryCamera(dkit);
         EntryCamera camEntry2 = new EntryCamera(dkit);
         ExitCamera camExit1 = new ExitCamera(dkit);
         ExitCamera camExit2 = new ExitCamera(dkit);
-        Panel p1 = new Panel(dkit);
-        Panel p2 = new Panel(dkit);
+        Displayable p1 = new DisplayPanel(dkit);
+        Displayable p2 = new DisplayPanel(dkit);
+       
         Gate gEntry1 = new Gate(dkit);
         gEntry1.setGateName("Entrance nr1");
         Gate gEntry2 = new Gate(dkit);
@@ -41,9 +44,10 @@ public class Dkit_flowTest {
         Gate gExit2 = new Gate(dkit);
         gExit2.setGateName("Exit nr2");
         
+       
         
-        dkit.registerPanel(p1);
-        dkit.registerPanel(p2);
+        dkit.registerDisplayPanel(p1);
+        dkit.registerDisplayPanel(p2);
         dkit.registerGate(gEntry1);
         dkit.registerGate(gEntry2);
         dkit.registerGate(gExit1);

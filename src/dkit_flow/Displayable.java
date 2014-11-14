@@ -9,7 +9,8 @@ package dkit_flow;
  *
  * @author Kris
  */
-public interface Reader {
-    public void read(String carID);
-    public void send(String carID);
+public interface Displayable {
+   public void display(); 
+   public void displayMessage(String message);
+   public void update(int freeSpace);
 }

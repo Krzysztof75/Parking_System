@@ -11,7 +11,7 @@ package dkit_flow;
  */
 public class Gate {
     private ParkingSystem dkit;
-    private String gateName;
+    private String gateID;
     
     public Gate(ParkingSystem dkit){
         this.dkit = dkit;
@@ -20,14 +20,14 @@ public class Gate {
     
     public void open(){
         if(dkit.getFreeSpaces()<400)
-        System.out.println("Gate " + gateName + " opened");
+        System.out.println("Gate " + gateID + " opened");
         else
             System.out.println("I'm sorry the parking is full at the moment try again later");
     }
     public String getGateName(){
-        return gateName;
+        return gateID;
     }
     public void setGateName(String gateName){
-        this.gateName = gateName;
+        this.gateID = gateName;
     }
 }

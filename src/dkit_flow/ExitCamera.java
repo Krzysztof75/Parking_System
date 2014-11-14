@@ -14,7 +14,7 @@ package dkit_flow;
 - read(String); reads String as an input
 -read(String Array) reads all elements in the array
 */
-public class ExitCamera {
+public class ExitCamera implements iSensor{
     String carID;       
     ParkingSystem dkit;                  // pointer to the ParkingSystem Object
     
@@ -22,6 +22,7 @@ public class ExitCamera {
         this.dkit = dkit;
     }
     
+    @Override
     public void read(String carID){           // read method taking String as an argument
         this.carID = carID;
         this.send(carID);
@@ -34,6 +35,7 @@ public class ExitCamera {
              this.send(carID);
         }  
     }
+    @Override
     public void send(String carID){                 // acivating the CarID in the ParkingSystem
         dkit.setCarID(this);
         
