@@ -15,7 +15,7 @@ package dkit_flow;
 -read(String Array) reads all elements in the array
 and a send() method acivating CarId in the ParkingSystem
 */
-public class EntryCamera implements iSensor{
+public class EntryCamera extends Camera{
     String carID;       
     ParkingSystem dkit;                  // pointer to the ParkingSystem Object
     
@@ -23,19 +23,6 @@ public class EntryCamera implements iSensor{
         this.dkit = dkit;
     }
     
-    @Override
-    public void read(String carID){           // read method taking String as an argument
-        this.carID = carID;
-        this.send(carID);
-    }
-    
-    public void read(String [] reg){          // read method taking String array as an argument
-     
-         for(int i = 0; i <= reg.length; i++){
-             carID = reg[i];
-             this.send(carID);
-        }  
-    }
     @Override
     public void send(String carID){
         dkit.setCarID(this);
