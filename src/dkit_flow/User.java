@@ -15,8 +15,20 @@ package dkit_flow;
 */
 public class User {
     private String carID;                 // car ID
-    private boolean isSubscriber;         // true - sets do Subscriber
-
+    private boolean isSubscriber;         // true - sets to Subscriber
+    private double balance;
+    
+    public User(){
+        carID = null;
+        isSubscriber = false;
+        balance = 0;
+    }
+    
+    public User(String carID){
+         this();
+         this.setCarID(carID);
+    }
+    
     /**
      * @return the carID
      */

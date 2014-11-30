@@ -13,11 +13,10 @@ public class DisplayPanel implements Displayable {
     
     private final ParkingSystem dkit;        
     private static int freeSpace;           // the number of the freeSpaces at the parking lot
-    private int panelID = 0;         // the identification number of the display will be stored here
+    private String panelID;         // the identification number of the display will be stored here
     
     public DisplayPanel(ParkingSystem dkit){
         this.dkit = dkit;
-        panelID +=1;
     }   
     
     @Override
@@ -34,10 +33,12 @@ public class DisplayPanel implements Displayable {
         System.out.println(message);
         
     }
-    public int getPanelID(){
+    public String getPanelID(){
         return panelID;
     }
-    
+    public void setPanelID(String id){
+        panelID = id;
+    }
     }
 
  

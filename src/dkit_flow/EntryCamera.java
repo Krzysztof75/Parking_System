@@ -15,17 +15,15 @@ package dkit_flow;
 -read(String Array) reads all elements in the array
 and a send() method acivating CarId in the ParkingSystem
 */
-public class EntryCamera extends Camera{
-    String carID;       
-    ParkingSystem dkit;                  // pointer to the ParkingSystem Object
+public class EntryCamera extends Camera{   
     
     public EntryCamera(ParkingSystem dkit){
-        this.dkit = dkit;
+        this.parkingSystem = dkit;                          // ps is a reference to Parking System object, it is inherited from camera class
     }
     
     @Override
     public void send(String carID){
-        dkit.setCarID(this);
+        parkingSystem.setCarID(this);
         
     }
 }

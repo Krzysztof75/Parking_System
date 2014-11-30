@@ -10,16 +10,16 @@ package dkit_flow;
  * @author Kris
  */
 public class Gate {
-    private ParkingSystem dkit;
+    private final ParkingSystem parkingSystem;
     private String gateID;
     
     public Gate(ParkingSystem dkit){
-        this.dkit = dkit;
+        this.parkingSystem = dkit;
         
     }
     
     public void open(){
-        if(dkit.getFreeSpaces()<400)
+        if(parkingSystem.getFreeSpaces()>0)
         System.out.println("Gate " + gateID + " opened");
         else
             System.out.println("I'm sorry the parking is full at the moment try again later");

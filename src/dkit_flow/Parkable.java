@@ -11,9 +11,11 @@ package dkit_flow;
  */
 public interface Parkable {
     
-    public void registerDisplayPanel(Displayable d);
+    public void registerDisplayPanel(Displayable d) throws Exception;
     public void removeDisplayPanel(Displayable d);
     public void updateDisplayable(int freeSpace); 
     public void registerGate(Gate g);
     public void removeGate(Gate g);
+    public void registerCamera(iSensor is);
+    public void removeCamera(iSensor is);
 }
