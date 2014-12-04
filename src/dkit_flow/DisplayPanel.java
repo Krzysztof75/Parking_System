@@ -20,15 +20,18 @@ public class DisplayPanel implements Displayable {
     }   
     
     @Override
-    public void update(int freeSpace){         // 
+//  this method update the count of free spaces and than call display() so that new value is displayed
+    public void update(int freeSpace){         
         DisplayPanel.freeSpace = freeSpace;
         display();
     }
     @Override
+    // displays count of free spaces
     public void display(){
         System.out.println(panelID + "Free space: " + freeSpace);
     }
     @Override
+    // displays massage which is passed to it as argument
     public void displayMessage(String message){
         System.out.println(message);
         

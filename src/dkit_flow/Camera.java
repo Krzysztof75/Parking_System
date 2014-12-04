@@ -12,7 +12,7 @@ package dkit_flow;
 public abstract class Camera implements iSensor{
     
     private String carID;       
-    ParkingSystem parkingSystem;                  // pointer to the ParkingSystem Object so that I can register with it
+    ParkingSystem parkingSystem;                  // pointer to the ParkingSystem Object so that the object camera can register with it
     
     @Override
     public void read(String carID){           // read method taking String as an argument
@@ -30,7 +30,7 @@ public abstract class Camera implements iSensor{
     }
   
     @Override
-    public abstract void send(String carID);          // acivating the CarID in the ParkingSystem               
+    public abstract void send(String carID);                      
 
     /**
      * @return the carID

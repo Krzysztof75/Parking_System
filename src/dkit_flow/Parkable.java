@@ -11,6 +11,8 @@ package dkit_flow;
  */
 public interface Parkable {
     
+    // this interface sets methods for registering/removing elements
+    
     public void registerDisplayPanel(Displayable d) throws Exception;
     public void removeDisplayPanel(Displayable d);
     public void updateDisplayable(int freeSpace); 

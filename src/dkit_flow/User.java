@@ -54,8 +54,9 @@ public class User {
     public void setBalance(double balance) {
         this.balance = balance;
     }
+    @Override
+    // Users equal method compares only carID as it is unique for each user
     public boolean equals(Object o){
-   
         if (o == null) {
             return false;
         }
@@ -65,6 +66,7 @@ public class User {
         User other = (User) o;
         return (other.carID.equals(this.carID));
     }
+    @Override
     public String toString(){
         return "CarID: " + carID;
     }

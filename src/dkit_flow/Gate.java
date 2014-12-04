@@ -24,10 +24,10 @@ public class Gate {
         else
             System.out.println("I'm sorry the parking is full at the moment try again later");
     }
-    public String getGateName(){
+    public String getGateID(){
         return gateID;
     }
-    public void setGateName(String gateName){
-        this.gateID = gateName;
+    public void setGateID(String gateID){
+        this.gateID = gateID;
     }
 }

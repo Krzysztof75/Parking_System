@@ -16,17 +16,18 @@ package dkit_flow;
 */
 public class ExitCamera extends Camera{    
     
+ /* parkingSystem is a reference to Parking System object, it is inherited from camera class
+ * we need it so that we can send message (carID) to parkingSystem object   
+ */ 
     
+    // constructor 
     public ExitCamera(ParkingSystem dkit){
-        this.parkingSystem = dkit;                 // ps is a reference to Parking System object, it is inherited from camera class
+        this.parkingSystem = dkit;                 
     }
     
-//    public void read(String carID){
-//        send(carID);
-//    }
-    
     @Override
-    public void send(String carID){                 // acivating the CarID in the ParkingSystem
+     // passing CarID to the ParkingSystem object
+    public void send(String carID){                
         parkingSystem.setCarID(this);
         System.out.println("Send carID from exit camera " + carID);
         

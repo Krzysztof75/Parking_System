@@ -9,7 +9,7 @@ package dkit_flow;
  *
  * @author Kris
  */
-// Take note that Subscriber inherits String carID, double balance and boolean isSubscriber from User
+// Take note that Subscriber inherits String carID and double balance from User
 public class Subscriber extends User {
     private String FirstName;
     private String LastName;
@@ -17,10 +17,11 @@ public class Subscriber extends User {
     private String accountNumber;
     private String phone;
     
+    //default user spec constructor
     public Subscriber(){
         super();
     }
-    // 
+    //user spec constructor taking several arguments 
     public Subscriber(String FirstName, String LastName, String carID, String account){
         super(carID);
         this.FirstName = FirstName;
@@ -31,6 +32,21 @@ public class Subscriber extends User {
           
     }
 
+     @Override
+    // we specified this equal method in case we need to compare Subscribers
+    public boolean equals(Object o){
+   
+        if (o == null) {
+            return false;
+        }
+        if (this.getClass() != o.getClass()) {
+            return false;
+        }
+        Subscriber other = (Subscriber) o;
+        return (other.getCarID().equals(this.getCarID()) && other.getFirstName().equals(this.getFirstName())
+                && other.getLastName().equals(this.getLastName()) && other.getAccountNumber().equals(other.getAccountNumber()));
+    }
+    
     /**
      * @return the FirstName
      */
@@ -100,16 +116,5 @@ public class Subscriber extends User {
     public String getPhone() {
         return phone;
     }
-    public boolean equals(Object o){
    
-        if (o == null) {
-            return false;
-        }
-        if (this.getClass() != o.getClass()) {
-            return false;
-        }
-        Subscriber other = (Subscriber) o;
-        return (other.getCarID().equals(this.getCarID()) && other.getFirstName().equals(this.getFirstName())
-                && other.getLastName().equals(this.getLastName()) && other.getAccountNumber().equals(other.getAccountNumber()));
-    }
 }

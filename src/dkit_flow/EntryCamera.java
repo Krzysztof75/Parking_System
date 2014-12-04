@@ -19,15 +19,13 @@ parkingSystem is a reference to Parking System object, it is inherited from Came
 */
 public class EntryCamera extends Camera{   
     
+    // constructor
     public EntryCamera(ParkingSystem dkit){
         this.parkingSystem = dkit;                         
     }
     
-//    public void read(String carID){
-//        send(carID);
-//    }
-    
     @Override
+    // passing carID to the parkingSystem object 
     public void send(String carID){
         parkingSystem.setCarID(this);
         System.out.println("Send carID from entry camera: " + carID);

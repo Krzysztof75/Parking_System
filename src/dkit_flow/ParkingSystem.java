@@ -13,24 +13,24 @@ import java.util.ArrayList;
  */
 public class ParkingSystem implements Parkable {
 
-    /**
-     * @return the TOTALCOUNT
-     */
+    /* when registering objects such as cameras, gates, displayPanels
+    the references to these objects are stored in the arrays specified below
+    */
     private final ArrayList<Displayable> panels;      // array holding references to the display panels
-    private final ArrayList<Gate> gates;
-    private final ArrayList<EntryCamera> entryCameras;
-    private final ArrayList<ExitCamera> exitCameras;
-    private ArrayList<User> traffic;
+    private final ArrayList<Gate> gates;                  // array holding references to the gates
+    private final ArrayList<EntryCamera> entryCameras;     // array holding references to the EntryCameras
+    private final ArrayList<ExitCamera> exitCameras;       // array holding references to the ExitCameras
+    private ArrayList<User> traffic;                          // we can store here all info from the table traffic
     private static int freeSpace = 928;         // number of ramaining free spaces change that to reflect value from DB
     private User user;                          // this object will store information of each car entering parking
-    public parkingDB db;
+    public parkingDB db;                        // reference to database
 
     public ParkingSystem() {
         panels = new ArrayList<>();
         gates = new ArrayList<>();
         entryCameras = new ArrayList<>();
         exitCameras = new ArrayList<>();
-        db = new parkingDB();
+        db = new parkingDB();                      // dataBase object invoked in the constructor of ParkingSystem object
     }
 
 

@@ -8,6 +8,8 @@ package dkit_flow;
 /**
  *
  * @author Kris
+ * this interface lets us group all "displayable" objects together so we can update the message (freeSpace) 
+ * on all panels registered with parkingSystem object at the same time
  */
 public interface Displayable {
    public void display(); 

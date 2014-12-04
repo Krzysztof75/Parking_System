@@ -42,9 +42,9 @@ public class Dkit_flowTest {
         // assigning names for the gates and panels, names will be used in database to record the movement of particular users
         // which gate did the user enter through? which gate did he/she used to leave?
         Gate GateEntry = new Gate(parkingSystem);
-        GateEntry.setGateName("Entrance nr1 ");
+        GateEntry.setGateID("Entrance nr1 ");
         Gate GateExit = new Gate(parkingSystem);
-        GateExit.setGateName("Exit nr1 ");
+        GateExit.setGateID("Exit nr1 ");
         
         DisplayPanel panel = new DisplayPanel(parkingSystem);
         panel.setPanelID("Display Panel nr1 ");
@@ -75,12 +75,7 @@ public class Dkit_flowTest {
         
         parkingDB.disconnect();
         
-       /* Have to distinguish between entryCamera and ExitCamera 
-        possible solution to overload setCarID to take two different types of cameras as an argument
-        1 type for entry scenario
-        1 type for exit scenario
-        
-               */
+      
     }
     
 }
