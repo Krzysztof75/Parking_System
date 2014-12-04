@@ -21,14 +21,13 @@ public class Subscriber extends User {
         super();
     }
     // 
-    public Subscriber(String CarID, String FirstName, String LastName, String adress, String phone, String account){
-        super(CarID);
+    public Subscriber(String FirstName, String LastName, String carID, String account){
+        super(carID);
         this.FirstName = FirstName;
         this.LastName = LastName;
-        this.adress = adress;
-        this.phone = phone;
+        this.setCarID(carID);
         this.accountNumber = account;
-        this.setIsSubscriber(true);
+     
           
     }
 
@@ -101,5 +100,16 @@ public class Subscriber extends User {
     public String getPhone() {
         return phone;
     }
-    
+    public boolean equals(Object o){
+   
+        if (o == null) {
+            return false;
+        }
+        if (this.getClass() != o.getClass()) {
+            return false;
+        }
+        Subscriber other = (Subscriber) o;
+        return (other.getCarID().equals(this.getCarID()) && other.getFirstName().equals(this.getFirstName())
+                && other.getLastName().equals(this.getLastName()) && other.getAccountNumber().equals(other.getAccountNumber()));
+    }
 }

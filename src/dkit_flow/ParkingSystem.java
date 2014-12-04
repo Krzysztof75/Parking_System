@@ -16,13 +16,13 @@ public class ParkingSystem implements Parkable {
     /**
      * @return the TOTALCOUNT
      */
-    private ArrayList<Displayable> panels;      // array holding references to the display panels
-    private ArrayList<Gate> gates;
-    private ArrayList<EntryCamera> entryCameras;
-    private ArrayList<ExitCamera> exitCameras;
+    private final ArrayList<Displayable> panels;      // array holding references to the display panels
+    private final ArrayList<Gate> gates;
+    private final ArrayList<EntryCamera> entryCameras;
+    private final ArrayList<ExitCamera> exitCameras;
     private ArrayList<User> traffic;
     private static int freeSpace = 928;         // number of ramaining free spaces change that to reflect value from DB
-    private User user;
+    private User user;                          // this object will store information of each car entering parking
     public parkingDB db;
 
     public ParkingSystem() {
@@ -30,7 +30,7 @@ public class ParkingSystem implements Parkable {
         gates = new ArrayList<>();
         entryCameras = new ArrayList<>();
         exitCameras = new ArrayList<>();
-        User user;                      // this object will store information of each car entering parking
+        db = new parkingDB();
     }
 
 
@@ -82,35 +82,48 @@ public class ParkingSystem implements Parkable {
         }
     }
 
-    // Camera object holds car ID, this value is than passed on to the User constructor
-
-    public void setCarID(EntryCamera c) {
-        user = new User(c.carID);
+    /*
+    Camera object holds car ID, this value is than passed on to the User constructor
+    */
+    public void setCarID(EntryCamera camera) {
+        user = new User(camera.getCarID());
+        user.setBalance(2);
+        System.out.println(user);
+        openGate(gates.get(0));
         // verify if subscriber
-        // send info to DB TRAFFIC
-        if (user.getIsSubscriber()) {
-            openGate(gates.get(0));
-        } else {
-            panels.get(0).displayMessage("This is paid parking If you don't want to be charged please leave within 30 min");
-            openGate(gates.get(0));
-        }
-        db.enterVehicle();
+        // send info to DB TRAFFIC appriopriate querry will insert a record into the databse Traffic table
+        //if (this.verifySubscriber(user)) {
+            //the program will invoke user.getIsSubscriber if confirmed condition boolean = true than
+            //the gate will open, 
+            
+        //} else {
+            //if not boolean = false than appriopriate massage is displayed and than the gate opens
+           // panels.get(0).displayMessage("This is paid parking If you don't want to be charged please leave within 30 min");
+           // openGate(gates.get(0));
+       // }
+        //the DataBase object is invoked enterVehicle method which will insert the recordset in the database
+        db.enterVehicle(camera);
+        //setFreeSpaces method substract 1 from static int freeSpaces ... static means all objects share the same variable
         setFreeSpaces(-1);
 
     }
 
     public void setCarID(ExitCamera c) {
-        user.setCarID(c.carID);
-        // verify isMember if not verify hasPaid
-        // 
+        user = new User(c.getCarID());
+        //invoking user method setCarID passing the value of carID from camera to user object
+        /* verify method isMember(boolean) if yes(true) open the gate immediately ("chance to display registered user's name")
+        //if not (false) verify hasPaid(boolean) run appriopriate querry's against data base if (true) open the gate 
+        // if not (false) display message that the user needs to pay
+        */
         openGate(gates.get(1));
-        db.exitVehicle();
+        db.exitVehicle(user);
         setFreeSpaces(1);
 
     }
 
     public void setFreeSpaces(int a) {
         freeSpace += a;
+    
         updateDisplayable(freeSpace);
 
     }
@@ -119,13 +132,16 @@ public class ParkingSystem implements Parkable {
         return freeSpace;
     }
 
-    public void verifySubscriber(User u) {
+    public boolean verifySubscriber(User u) {
+      boolean subscriber = false; 
         // querry DB if subscribed
-        u.setIsSubscriber(true);
+      return subscriber;
     }
 
-    public void verifyHasPaid(User u) {
+    public boolean verifyHasPaid(User u) {
+        boolean hasPaid = false;
         // querry DB if hasPaid()
+                return hasPaid;
     }
 
     public void openGate(Gate g) {

@@ -14,16 +14,23 @@ package dkit_flow;
 - read(String); reads String as an input
 -read(String Array) reads all elements in the array
 and a send() method acivating CarId in the ParkingSystem
+parkingSystem is a reference to Parking System object, it is inherited from Camera class
+ it will be used to in the constructor of user object in the controlling ParkingSystem class
 */
 public class EntryCamera extends Camera{   
     
     public EntryCamera(ParkingSystem dkit){
-        this.parkingSystem = dkit;                          // ps is a reference to Parking System object, it is inherited from camera class
+        this.parkingSystem = dkit;                         
     }
+    
+//    public void read(String carID){
+//        send(carID);
+//    }
     
     @Override
     public void send(String carID){
         parkingSystem.setCarID(this);
+        System.out.println("Send carID from entry camera: " + carID);
         
     }
 }

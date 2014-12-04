@@ -14,13 +14,11 @@ package dkit_flow;
 
 */
 public class User {
-    private String carID;                 // car ID
-    private boolean isSubscriber;         // true - sets to Subscriber
+    private String carID;                 // car ID and balance are the only think we need from the user
     private double balance;
     
     public User(){
         carID = null;
-        isSubscriber = false;
         balance = 0;
     }
     
@@ -44,16 +42,31 @@ public class User {
     }
 
     /**
-     * @return the isSubscriber
+     * @return the balance
      */
-    public boolean getIsSubscriber() {
-        return isSubscriber;
+    public double getBalance() {
+        return balance;
     }
 
     /**
-     * @param isSubscriber the isSubscriber to set
+     * @param balance the balance to set
      */
-    public void setIsSubscriber(boolean isSubscriber) {
-        this.isSubscriber = isSubscriber;
+    public void setBalance(double balance) {
+        this.balance = balance;
     }
+    public boolean equals(Object o){
+   
+        if (o == null) {
+            return false;
+        }
+        if (this.getClass() != o.getClass()) {
+            return false;
+        }
+        User other = (User) o;
+        return (other.carID.equals(this.carID));
+    }
+    public String toString(){
+        return "CarID: " + carID;
+    }
+
 }

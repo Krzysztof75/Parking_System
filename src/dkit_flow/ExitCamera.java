@@ -21,9 +21,14 @@ public class ExitCamera extends Camera{
         this.parkingSystem = dkit;                 // ps is a reference to Parking System object, it is inherited from camera class
     }
     
+//    public void read(String carID){
+//        send(carID);
+//    }
+    
     @Override
     public void send(String carID){                 // acivating the CarID in the ParkingSystem
         parkingSystem.setCarID(this);
+        System.out.println("Send carID from exit camera " + carID);
         
     }
 }

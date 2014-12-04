@@ -11,24 +11,39 @@ package dkit_flow;
  */
 public abstract class Camera implements iSensor{
     
-    String carID;       
-    ParkingSystem parkingSystem;                  // pointer to the ParkingSystem Object
+    private String carID;       
+    ParkingSystem parkingSystem;                  // pointer to the ParkingSystem Object so that I can register with it
     
     @Override
     public void read(String carID){           // read method taking String as an argument
-        this.carID = carID;
+        this.setCarID(carID);
         this.send(carID);
     }
     
     public void read(String [] reg){          // read method taking String array as an argument
      
-         for(int i = 0; i <= reg.length; i++){
-             carID = reg[i];
-             this.send(carID);
+         for(int i = 0; i < reg.length; i++){
+             setCarID(reg[i]);
+             System.out.println("invoking read method from abstract Camera class");
+             this.send(getCarID());
         }  
     }
   
     @Override
-    public abstract void send(String carID);                // acivating the CarID in the ParkingSystem
+    public abstract void send(String carID);          // acivating the CarID in the ParkingSystem               
+
+    /**
+     * @return the carID
+     */
+    public String getCarID() {
+        return carID;
+    }
+
+    /**
+     * @param carID the carID to set
+     */
+    public void setCarID(String carID) {
+        this.carID = carID;
+    }
         
 }

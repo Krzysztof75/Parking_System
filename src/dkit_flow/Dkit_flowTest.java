@@ -18,10 +18,10 @@ public class Dkit_flowTest {
     Testing class 
     */
     // String arrays incoming and outgoing traffic simulate cars coming and leaving the car
-    static String [] incomingTrafficEntry1 = new String[]{"11D121222","12H12543","02Y34567","04Y34567"};
-    static String [] incomingTrafficEntry2 = new String[]{"11D121452","12H12549","02B11567","0134527"};
-    static String [] outgoingTraffic1 = new String[]{"11D121222","12H12543","02Y34567","02G13425"};
-    static String [] outgoingTraffic2 = new String[]{"11D121452","12H12549","02B11567","02G13425"};
+    static String [] incomingTrafficEntry1 = new String[]{"11DP212","12HA254","02YL456","04YK456"};
+    static String [] incomingTrafficEntry2 = new String[]{"11DD214","12HG125","02BA156","01JI527"};
+    static String [] outgoingTraffic1 = new String[]{"11DP212","12HA254","02YL456","04YK456"};
+    static String [] outgoingTraffic2 = new String[]{"11DD214","12HG125","02BA156","01JI527"};
     
     public static void main(String[] args) {
         // TODO code application logic here
@@ -36,19 +36,18 @@ public class Dkit_flowTest {
         EntryCamera camEntry = new EntryCamera(parkingSystem);
         ExitCamera camExit = new ExitCamera(parkingSystem);
         
-        parkingDB db = new parkingDB();
-//        db.connect();
-//        db.disconnect();
+        //parkingDB db = new parkingDB();
+        
        
         // assigning names for the gates and panels, names will be used in database to record the movement of particular users
         // which gate did the user enter through? which gate did he/she used to leave?
         Gate GateEntry = new Gate(parkingSystem);
-        GateEntry.setGateName("Entrance nr1");
+        GateEntry.setGateName("Entrance nr1 ");
         Gate GateExit = new Gate(parkingSystem);
-        GateExit.setGateName("Exit nr1");
+        GateExit.setGateName("Exit nr1 ");
         
         DisplayPanel panel = new DisplayPanel(parkingSystem);
-        panel.setPanelID("Display Panel 1");
+        panel.setPanelID("Display Panel nr1 ");
         
         
         
@@ -58,19 +57,24 @@ public class Dkit_flowTest {
         parkingSystem.registerCamera(camEntry);
         parkingSystem.registerCamera(camExit);
         
+        //Registering Subscriber
+        Subscriber sub = new Subscriber("Krzysztof", "Gilewski","04LK298","090786876567");
+        parkingDB.registerSubscriber(sub);
+    
         
-        for(String reg : incomingTrafficEntry1){
-            camEntry.read(reg);
-        }
-        for(String reg : outgoingTraffic1){
-            camExit.read(reg);
-        }
-        for(String reg : incomingTrafficEntry2){
-            camEntry.read(reg);
-        }
-        for(String reg : outgoingTraffic2){
-            camExit.read(reg);
-        }
+        camEntry.read(incomingTrafficEntry1);
+        System.out.println();
+        camExit.read(outgoingTraffic1);
+        System.out.println();
+        camEntry.read(incomingTrafficEntry2);
+        System.out.println();
+        camExit.read(outgoingTraffic2);
+        System.out.println();
+        
+        
+        
+        parkingDB.disconnect();
+        
        /* Have to distinguish between entryCamera and ExitCamera 
         possible solution to overload setCarID to take two different types of cameras as an argument
         1 type for entry scenario
