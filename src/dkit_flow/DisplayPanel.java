@@ -21,7 +21,8 @@ public class DisplayPanel implements Displayable {
     
     @Override
 //  this method update the count of free spaces and than call display() so that new value is displayed
-    public void update(int freeSpace){         
+    public void update(int freeSpace){
+        freeSpace = dkit.getFreeSpaces();
         DisplayPanel.freeSpace = freeSpace;
         display();
     }

@@ -27,9 +27,10 @@ public class ExitCamera extends Camera{
     
     @Override
      // passing CarID to the ParkingSystem object
-    public void send(String carID){                
-        parkingSystem.setCarID(this);
+    public void send(String carID){  
         System.out.println("Send carID from exit camera " + carID);
+        parkingSystem.setCarID(this);
+        
         
     }
 }

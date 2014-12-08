@@ -11,6 +11,9 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 /**
  *
@@ -22,9 +25,8 @@ public class parkingDB{
     // this array will hold the most recent information from subscriber table
     ArrayList<Subscriber>subscribers = new ArrayList();
     static Statement statement = null;
-    static PreparedStatement pstmt = null;
-    static PreparedStatement pstmt2 = null;
-    ResultSet rs = null;
+    static PreparedStatement preparedStatement = null;
+    static ResultSet resultSet = null;
     
      // these variables are neccessary to connect to the database
      private static String url;
@@ -112,17 +114,17 @@ public class parkingDB{
     // prepare blob object from an existing binary column
     String insert = "insert into subscribers (FirstName, LastName, carID, accountNumber ,balance ) values(?, ?, ?, ?, ?)";
     try{
-    pstmt = conn.prepareStatement(insert);
+    preparedStatement = conn.prepareStatement(insert);
 
-    pstmt.setObject(1, inputValues[0]);
-    pstmt.setObject(2, inputValues[1]);
-    pstmt.setObject(3, inputValues[2]);
-    pstmt.setObject(4, inputValues[3]);
-    pstmt.setObject(5, inputValues[4]);
+    preparedStatement.setObject(1, inputValues[0]);
+    preparedStatement.setObject(2, inputValues[1]);
+    preparedStatement.setObject(3, inputValues[2]);
+    preparedStatement.setObject(4, inputValues[3]);
+    preparedStatement.setObject(5, inputValues[4]);
 
-    pstmt.executeUpdate();
+    preparedStatement.executeUpdate();
     
-    pstmt.close();
+    preparedStatement.close();
     
     }catch(SQLException e){
         System.out.println("There is a problem with querry insert Subsriber");
@@ -130,42 +132,104 @@ public class parkingDB{
            
     }
     
-    public boolean isSubscriber(User u){
+    public static boolean isSubscriber(User u){
         boolean isSubscriber = false;
         
-        String query = "select FirstName, LastName, carID, accountNumber, balance from resume where id=?";
+        String sql = "SELECT firstName FROM subscribers where carID='" + u.getCarID() + "'";
 
-//    pstmt2 = conn.prepareStatement(query);
-//    pstmt2.setObject(1, inputValues[0]);
-//    rs = pstmt2.executeQuery();
-//    Object[] outputValues = new Object[columnNames.length];
-//    if (rs.next()) {
-//      for (int i = 0; i < columnNames.length; i++) {
-//        outputValues[i] = rs.getObject(i + 1);
-//      }
-//    }
-//    System.out.println("FistName " + ((String) outputValues[0]));
-//    System.out.println("LastName " + ((String) outputValues[1]));
-//    System.out.println("carID " + ((String) outputValues[2]));
-//    System.out.println("accountNumber " + ((String) outputValues[3]));
-//    System.out.println("balance ") + ((String) outputValues[4]);
+        try{
+    statement = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+                                     ResultSet.CONCUR_UPDATABLE);
+    System.out.println("Executing select");
+          resultSet = statement.executeQuery(sql);
 
-       
-        // run DB querry to check if the user is registered if true set isSubscriber = true
-        
+          if(resultSet.first() == true){
+              isSubscriber = true;
+          }
+          System.out.println(u.getCarID() + " is subscriber: " + isSubscriber);
+          return isSubscriber;
+  
+    }catch(SQLException e){
+    System.out.println("There is a problem with isSubscriber querry");
+}
         return isSubscriber;
-    }
-    
+    }  
     public void removeSubscriber(){
        
         // selete the subscriber from the subscriber table
            }
-    public void updateBalance(){
-      
-        // update balance in the traffic table or if Subscriber update balance in the subscriber table
-       
+    public double getBalance(User u){
+        double balance = -1;
+        try{
+       statement = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+                                     ResultSet.CONCUR_UPDATABLE);
+           
+          String sql = "SELECT balance FROM traffic WHERE CarID='" + u.getCarID() + "'";
+          System.out.println("Executing select");
+          resultSet = statement.executeQuery(sql);
+
+          if(resultSet.first() == false){
+              System.out.println("There is no matching record");
+          }
+          
+          while(resultSet.next()){
+         //Retrieve by column name
+         balance = resultSet.getDouble("balance");
+         u.setBalance(balance);
+          } 
+        } catch(SQLException e){
+         System.out.println("There is a problem with check balance querry");
+    } return balance;
     }
-    public void enterVehicle(Camera c){
+   
+    public static void updateBalance(User u, double amount){
+        
+      try{ 
+          
+          statement = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+                                     ResultSet.CONCUR_UPDATABLE);
+         
+          String sql = "UPDATE traffic SET balance ='" + amount + "' WHERE CarID ='" + u.getCarID() + "'";
+          
+          statement.executeUpdate(sql);
+          System.out.println("Executing update in updateBalance user method ");
+          
+      u.setBalance(0.00);
+        // update balance in the traffic table or if Subscriber update balance in the subscriber table
+      System.out.println("Paid for " + u.getCarID());
+      }catch(SQLException e){
+          System.out.println("There is a problem with balance update querry");
+          e.printStackTrace();
+      }
+    }
+    
+     public static void updateBalance(Subscriber s, double amount){
+         double balance = s.getBalance();
+         System.out.println("current balance: " + balance);
+         balance+=amount;
+         
+      try{ 
+          
+          statement = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+                                     ResultSet.CONCUR_UPDATABLE);
+         
+          String sql = "UPDATE traffic SET balance ='"+ balance + "'" + " WHERE CarID ='" + s.getCarID() + "'";
+          
+          statement.executeUpdate(sql);
+          System.out.println("Executing update in updateBalance subscriber method");
+          
+      s.setBalance(0.00);
+        // update balance in the traffic table or if Subscriber update balance in the subscriber table
+      System.out.println("Paid for " + s.getCarID());
+      }catch(SQLException e){
+          System.out.println("There is a problem with balance update querry");
+          e.printStackTrace();
+      }
+    }
+    
+    
+    
+    public void insertTraffic(Camera c){
         
         System.out.println("enterVehicle method in ParkingDB: " + c.getCarID());
         
@@ -178,24 +242,44 @@ public class parkingDB{
     
     try{
     
-    pstmt = conn.prepareStatement(insert);
-    pstmt.setObject(1, inputValues[0]);
-    pstmt.executeUpdate();
-    pstmt.close();
+    preparedStatement = conn.prepareStatement(insert);
+    preparedStatement.setObject(1, inputValues[0]);
+    preparedStatement.executeUpdate();
+    preparedStatement.close();
     
     }catch(SQLException e){
         System.out.println("There is a problem with querry insert into traffic");
         e.printStackTrace();
     }
-        
+     traffic.add(new User(c.getCarID()));
         // insert record into the traffic table 
         
     }
     public void exitVehicle(User u){
        System.out.println("exitVehicle method in parkingDB: " + u.getCarID());
-        // update record in the traffic table where carID == " "
        
+       DateFormat dateFormat = new SimpleDateFormat("yyyy:MM:dd HH:mm:ss");
+       Calendar cal = Calendar.getInstance();
+       
+       String currentDate = dateFormat.format(cal.getTime());
+        System.out.println(currentDate); 
+          
+        try{ 
+          
+          statement = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+                                     ResultSet.CONCUR_UPDATABLE);
+         
+          String sql = "UPDATE traffic SET DateOut = '" + currentDate + "' WHERE CarID ='" + u.getCarID() + "'";
+          statement.executeUpdate(sql);
+          System.out.println("Executing update time in exitVehicle method");
+          
+      }catch(SQLException e){
+          System.out.println("There is a problem with balance update querry");
+          e.printStackTrace();
+      }
+        // update record in the traffic table where carID == " "
     }
+    
     public ArrayList<User>getTraffic(){ 
        
        
@@ -203,6 +287,32 @@ public class parkingDB{
        
         
     return traffic;   
+    }
+    
+    public boolean verifyHasPaid(User u) {
+        boolean hasPaid = false;
+        
+        try{
+        String query = "SELECT balance FROM traffic where CarID = '"+ u.getCarID()+ "'";
+         // create the java statement
+        statement = conn.createStatement();
+        resultSet = statement.executeQuery(query);
+        while (resultSet.next())
+      {
+        double balance = resultSet.getDouble("balance");
+        if(balance == 0.00){
+           hasPaid = true;
+           System.out.println(u.getCarID() + " hasPaid");
+           break;
+        }
+      }
+        }catch(SQLException e){
+            System.out.println("There is a problem with check balance querry");
+            e.printStackTrace();
+        }
+        
+        // querry DB if hasPaid()
+                return hasPaid;
     }
     /**
      * @return the url

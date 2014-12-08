@@ -21,16 +21,17 @@ public class ParkingSystem implements Parkable {
     private final ArrayList<EntryCamera> entryCameras;     // array holding references to the EntryCameras
     private final ArrayList<ExitCamera> exitCameras;       // array holding references to the ExitCameras
     private ArrayList<User> traffic;                          // we can store here all info from the table traffic
-    private static int freeSpace = 928;         // number of ramaining free spaces change that to reflect value from DB
+    private static int freeSpace = 928;         // number of ramaining free spaces static means variable is schared among other objects
     private User user;                          // this object will store information of each car entering parking
-    public parkingDB db;                        // reference to database
+    public parkingDB dataBase;                        // reference to database
 
     public ParkingSystem() {
         panels = new ArrayList<>();
         gates = new ArrayList<>();
+        traffic = new ArrayList<>();
         entryCameras = new ArrayList<>();
         exitCameras = new ArrayList<>();
-        db = new parkingDB();                      // dataBase object invoked in the constructor of ParkingSystem object
+        dataBase = new parkingDB();                      // dataBase object invoked in the constructor of ParkingSystem object
     }
 
 
@@ -87,23 +88,19 @@ public class ParkingSystem implements Parkable {
     */
     public void setCarID(EntryCamera camera) {
         user = new User(camera.getCarID());
+        traffic.add(user);
         user.setBalance(2);
-        System.out.println(user);
+        if(parkingDB.isSubscriber(user)){
+            Subscriber subscriber = new Subscriber(user);
+            dataBase.updateBalance(subscriber,2.0);
+            openGate(gates.get(0));
+        } else 
+            System.out.println("This is paid parking if you don't want to use it leave within 30min");
+        
+        dataBase.insertTraffic(camera);
+        System.out.println("User entering the parking " + user);
         openGate(gates.get(0));
-        // verify if subscriber
-        // send info to DB TRAFFIC appriopriate querry will insert a record into the databse Traffic table
-        //if (this.verifySubscriber(user)) {
-            //the program will invoke user.getIsSubscriber if confirmed condition boolean = true than
-            //the gate will open, 
-            
-        //} else {
-            //if not boolean = false than appriopriate massage is displayed and than the gate opens
-           // panels.get(0).displayMessage("This is paid parking If you don't want to be charged please leave within 30 min");
-           // openGate(gates.get(0));
-       // }
-        //the DataBase object is invoked enterVehicle method which will insert the recordset in the database
-        db.enterVehicle(camera);
-        //setFreeSpaces method substract 1 from static int freeSpaces ... static means all objects share the same variable
+        
         setFreeSpaces(-1);
 
     }
@@ -115,12 +112,26 @@ public class ParkingSystem implements Parkable {
         //if not (false) verify hasPaid(boolean) run appriopriate querry's against data base if (true) open the gate 
         // if not (false) display message that the user needs to pay
         */
+        if(dataBase.isSubscriber(user)){                   // check if user is subscribed
+           dataBase.exitVehicle(user);
+           openGate(gates.get(1));
+           setFreeSpaces(1);
+        }else if(dataBase.verifyHasPaid(user)){             // if not subscriber but hasPaid
         openGate(gates.get(1));
-        db.exitVehicle(user);
+        dataBase.exitVehicle(user);                   
         setFreeSpaces(1);
-
-    }
-
+        
+           for(int i = 0; i < traffic.size(); i++){
+            if(traffic.get(i).getCarID().equals(user.getCarID())){
+                traffic.remove(i);  
+            }
+           }
+        
+        } else 
+         System.out.println("Your balance is not paid, you need to pay before you can leave the parking");
+        }
+    
+    
     public void setFreeSpaces(int a) {
         freeSpace += a;
     
@@ -138,11 +149,7 @@ public class ParkingSystem implements Parkable {
       return subscriber;
     }
 
-    public boolean verifyHasPaid(User u) {
-        boolean hasPaid = false;
-        // querry DB if hasPaid()
-                return hasPaid;
-    }
+    
 
     public void openGate(Gate g) {
         g.open();

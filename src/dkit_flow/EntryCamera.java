@@ -27,8 +27,9 @@ public class EntryCamera extends Camera{
     @Override
     // passing carID to the parkingSystem object 
     public void send(String carID){
-        parkingSystem.setCarID(this);
         System.out.println("Send carID from entry camera: " + carID);
+        parkingSystem.setCarID(this);
+        
         
     }
 }

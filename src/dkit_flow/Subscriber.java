@@ -21,6 +21,11 @@ public class Subscriber extends User {
     public Subscriber(){
         super();
     }
+    
+    public Subscriber(User u){
+        super(u.getCarID());
+    }
+    
     //user spec constructor taking several arguments 
     public Subscriber(String FirstName, String LastName, String carID, String account){
         super(carID);

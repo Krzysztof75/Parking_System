@@ -16,8 +16,8 @@ public abstract class Camera implements iSensor{
     
     @Override
     public void read(String carID){           // read method taking String as an argument
-        this.setCarID(carID);
-        this.send(carID);
+        this.setCarID(carID);                 // assign carID value read by camera to the carID instatnce variable
+        this.send(carID);                     // look for the implementation of send method in Entry and Exit cameras  
     }
     
     public void read(String [] reg){          // read method taking String array as an argument
