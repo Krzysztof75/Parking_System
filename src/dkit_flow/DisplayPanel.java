@@ -11,18 +11,18 @@ package dkit_flow;
  */
 public class DisplayPanel implements Displayable {
     
-    private final ParkingSystem dkit;        
+    private final ParkingSystem parkingSystem;      // we will link two objects (ParkingSystem and DisplayPanel through this link  
     private static int freeSpace;           // the number of the freeSpaces at the parking lot
-    private String panelID;         // the identification number of the display will be stored here
+    private String panelID;                 // the identification number of the display will be stored here we can include a List of panels over here
     
-    public DisplayPanel(ParkingSystem dkit){
-        this.dkit = dkit;
+    public DisplayPanel(ParkingSystem parkingSystem){
+        this.parkingSystem = parkingSystem;
     }   
     
-    @Override
 //  this method update the count of free spaces and than call display() so that new value is displayed
+    @Override
     public void update(int freeSpace){
-        freeSpace = dkit.getFreeSpaces();
+        freeSpace = parkingSystem.getFreeSpaces();
         DisplayPanel.freeSpace = freeSpace;
         display();
     }

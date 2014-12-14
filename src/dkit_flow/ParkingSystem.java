@@ -5,7 +5,15 @@
  */
 package dkit_flow;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 /**
  *
@@ -14,13 +22,12 @@ import java.util.ArrayList;
 public class ParkingSystem implements Parkable {
 
     /* when registering objects such as cameras, gates, displayPanels
-    the references to these objects are stored in the arrays specified below
-    */
+     the references to these objects are stored in the arrays specified below
+     */
     private final ArrayList<Displayable> panels;      // array holding references to the display panels
     private final ArrayList<Gate> gates;                  // array holding references to the gates
     private final ArrayList<EntryCamera> entryCameras;     // array holding references to the EntryCameras
     private final ArrayList<ExitCamera> exitCameras;       // array holding references to the ExitCameras
-    private ArrayList<User> traffic;                          // we can store here all info from the table traffic
     private static int freeSpace = 928;         // number of ramaining free spaces static means variable is schared among other objects
     private User user;                          // this object will store information of each car entering parking
     public parkingDB dataBase;                        // reference to database
@@ -28,12 +35,10 @@ public class ParkingSystem implements Parkable {
     public ParkingSystem() {
         panels = new ArrayList<>();
         gates = new ArrayList<>();
-        traffic = new ArrayList<>();
         entryCameras = new ArrayList<>();
         exitCameras = new ArrayList<>();
         dataBase = new parkingDB();                      // dataBase object invoked in the constructor of ParkingSystem object
     }
-
 
     @Override
     public void registerDisplayPanel(Displayable p) {
@@ -84,57 +89,93 @@ public class ParkingSystem implements Parkable {
     }
 
     /*
-    Camera object holds car ID, this value is than passed on to the User constructor
-    */
+     Camera object holds car ID, this value is than passed on to the User constructor
+     */
     public void setCarID(EntryCamera camera) {
-        user = new User(camera.getCarID());
-        traffic.add(user);
-        user.setBalance(2);
-        if(parkingDB.isSubscriber(user)){
-            Subscriber subscriber = new Subscriber(user);
-            dataBase.updateBalance(subscriber,2.0);
-            openGate(gates.get(0));
-        } else 
-            System.out.println("This is paid parking if you don't want to use it leave within 30min");
-        
-        dataBase.insertTraffic(camera);
+
+        User user = new User(camera.getCarID());
+        // check if subscribed than assign hasPaid boolean = true
+        if (parkingDB.isSubscriber(user)) {
+             System.out.println(camera.getCarID() + " is subscriber");
+        } else {
+           System.out.println("This is paid parking if you don't want to use it leave within 30min");
+        }
         System.out.println("User entering the parking " + user);
+        parkingDB.getTraffic().add(user);
+        parkingDB.insertTraffic(user);
         openGate(gates.get(0));
-        
         setFreeSpaces(-1);
 
     }
 
     public void setCarID(ExitCamera c) {
-        user = new User(c.getCarID());
-        //invoking user method setCarID passing the value of carID from camera to user object
-        /* verify method isMember(boolean) if yes(true) open the gate immediately ("chance to display registered user's name")
-        //if not (false) verify hasPaid(boolean) run appriopriate querry's against data base if (true) open the gate 
-        // if not (false) display message that the user needs to pay
-        */
-        if(dataBase.isSubscriber(user)){                   // check if user is subscribed
-           dataBase.exitVehicle(user);
-           openGate(gates.get(1));
-           setFreeSpaces(1);
-        }else if(dataBase.verifyHasPaid(user)){             // if not subscriber but hasPaid
-        openGate(gates.get(1));
-        dataBase.exitVehicle(user);                   
-        setFreeSpaces(1);
-        
-           for(int i = 0; i < traffic.size(); i++){
-            if(traffic.get(i).getCarID().equals(user.getCarID())){
-                traffic.remove(i);  
+
+        DateFormat dateFormat = new SimpleDateFormat("yyyy:MM:dd HH:mm:ss");
+        Calendar cal = Calendar.getInstance();
+        String currentDate = dateFormat.format(cal.getTime());
+
+        User user = new User(c.getCarID());
+        //find the right user object in the array list 
+        for (int i = 0; i < parkingDB.getTraffic().size(); i++) {
+            if (parkingDB.getTraffic().get(i).getCarID().equals(c.getCarID())) {
+                // set the timeOut = time of leaving
+                parkingDB.getTraffic().get(i).setTimeOut(currentDate);
+                user = parkingDB.getTraffic().get(i);
+                break;
             }
-           }
-        
-        } else 
-         System.out.println("Your balance is not paid, you need to pay before you can leave the parking");
         }
-    
-    
+        user.setTimeOut(currentDate);
+        double balance = parkingDB.calculateCharge(user);
+        if(balance == 0){
+            user.setHasPaid(1);
+        }
+        Subscriber subscriber;
+        if(parkingDB.isSubscriber(user)){
+            for (Subscriber sub : parkingDB.getSubscribers()) {
+                if (user.getCarID().equals(sub.getCarID())) {
+                    subscriber = sub;
+                    subscriber.setHasPaid(1);
+                    parkingDB.updateBalance(subscriber, balance);
+                    openGate(gates.get(1));
+                    setFreeSpaces(-1);
+                  //  parkingDB.exitTraffic(user);
+                    break;
+                }
+            }  
+        } else if(user.getHasPaid() == 1){
+           openGate(gates.get(1));
+           setFreeSpaces(-1);
+           parkingDB.exitTraffic(user);
+        }else{
+            
+            System.out.println("You need to pay before you can leave the parking");
+        }
+
+            for (int i = 0; i < parkingDB.getTraffic().size(); i++) {
+                if (parkingDB.getTraffic().get(i).getCarID().equals(user.getCarID())) {
+                    parkingDB.getTraffic().remove(i);
+                }
+            }
+        
+    }
+
+    public void backupTraffic() throws IOException {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy:MM:dd HH:mm:ss");
+        Calendar cal = Calendar.getInstance();
+        String currentDate = dateFormat.format(cal.getTime());
+        ArrayList traffic = parkingDB.getTraffic();
+        try {
+            File file = new File("Text file + " + currentDate + ".txt");
+            FileWriter fileWrit = new FileWriter(file);
+
+        } catch (FileNotFoundException e) {
+            System.out.println("There is a problem writing to a file");
+        }
+    }
+
     public void setFreeSpaces(int a) {
         freeSpace += a;
-    
+
         updateDisplayable(freeSpace);
 
     }
@@ -144,12 +185,10 @@ public class ParkingSystem implements Parkable {
     }
 
     public boolean verifySubscriber(User u) {
-      boolean subscriber = false; 
+        boolean subscriber = false;
         // querry DB if subscribed
-      return subscriber;
+        return subscriber;
     }
-
-    
 
     public void openGate(Gate g) {
         g.open();

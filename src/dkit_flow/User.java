@@ -5,6 +5,10 @@
  */
 package dkit_flow;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 /**
  *
  * @author Kris
@@ -16,17 +20,40 @@ package dkit_flow;
 public class User {
     private String carID;                 // car ID and balance are the only think we need from the user
     private double balance;
+    private String timeIn;
+    private String timeOut;
+    private int hasPaid;
+       DateFormat dateFormat = new SimpleDateFormat("yyyy:MM:dd HH:mm:ss");
+       Calendar cal = Calendar.getInstance();
+       String currentDate = dateFormat.format(cal.getTime());
+
     
     public User(){
         carID = null;
         balance = 0;
+        hasPaid = 0;
     }
     
     public User(String carID){
          this();
-         this.setCarID(carID);
+         this.carID = carID;
+         timeIn = currentDate;
     }
     
+    public User(String carID, String timeIN){
+         this();
+         this.carID = carID;
+         this.timeIn = timeIN;
+    }
+    public User(String carID,String timeIN, String TimeOut, double balance){
+        this(carID,timeIN);
+        this.timeOut = TimeOut;
+        this.balance = balance;
+        
+    }
+    public int getHasPaid(){
+        return hasPaid;
+    }
     /**
      * @return the carID
      */
@@ -68,7 +95,47 @@ public class User {
     }
     @Override
     public String toString(){
-        return "CarID: " + carID;
+        // Return description of an object
+        return "CarID: " + this.carID + " Time in + " + this.timeIn + " Time out: " + this.timeOut + " balance: " + balance + "hasPaid: " + hasPaid;
+    }
+
+    /**
+     * @return the timeIN
+     */
+    public String getTimeIN() {
+        return timeIn;
+    }
+
+    /**
+     * @param timeIN the timeIN to set
+     */
+    public void setTimeIn(String timeIN) {
+        this.timeIn = timeIN;
+    }
+
+    /**
+     * @return the timeOUT
+     */
+    public String getTimeOut() {
+        return timeOut;
+    }
+
+    /**
+     * @param timeOUT the timeOUT to set
+     */
+    public void setTimeOut(String timeOUT) {
+        this.timeOut = timeOUT;
+    }
+
+    /**
+     * @return the hasPaid
+     */
+
+    /**
+     * @param hasPaid the hasPaid to set
+     */
+    public void setHasPaid(int hasPaid) {
+        this.hasPaid = hasPaid;
     }
 
 }

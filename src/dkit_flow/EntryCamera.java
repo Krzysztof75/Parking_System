@@ -12,8 +12,8 @@ package dkit_flow;
 /* class representing camera type reader
    with two read methods:
 - read(String); reads String as an input
--read(String Array) reads all elements in the array
-and a send() method acivating CarId in the ParkingSystem
+-read(String Array) reads String elements in the array
+and a send() method acivating CarId through setCarID(Entry Camera) method in the ParkingSystem
 parkingSystem is a reference to Parking System object, it is inherited from Camera class
  it will be used to in the constructor of user object in the controlling ParkingSystem class
 */

@@ -27,12 +27,14 @@ public class Subscriber extends User {
     }
     
     //user spec constructor taking several arguments 
-    public Subscriber(String FirstName, String LastName, String carID, String account){
+    public Subscriber(String FirstName, String LastName, String carID, String account, double balance){
+        // invoking super class User constructor to initiate various instance variables
         super(carID);
-        this.FirstName = FirstName;
-        this.LastName = LastName;
+        this.setFirstName(FirstName);
+        this.setLastName(LastName);
         this.setCarID(carID);
-        this.accountNumber = account;
+        this.setAccountNumber(account);
+        this.setHasPaid(1);
      
           
     }
@@ -50,6 +52,12 @@ public class Subscriber extends User {
         Subscriber other = (Subscriber) o;
         return (other.getCarID().equals(this.getCarID()) && other.getFirstName().equals(this.getFirstName())
                 && other.getLastName().equals(this.getLastName()) && other.getAccountNumber().equals(other.getAccountNumber()));
+    }
+    
+      @Override
+    public String toString(){
+        
+        return super.toString() + " First Name: " + this.FirstName + " Last Name: " + this.LastName;
     }
     
     /**

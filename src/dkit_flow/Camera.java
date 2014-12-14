@@ -11,7 +11,8 @@ package dkit_flow;
  */
 public abstract class Camera implements iSensor{
     
-    private String carID;       
+    private String carID;                         // this variable will be used to pass the carID value inside Camera object 
+                                                  //the Camera object will pass itself as argument to the ParkingSystem method setCarID
     ParkingSystem parkingSystem;                  // pointer to the ParkingSystem Object so that the object camera can register with it
     
     @Override

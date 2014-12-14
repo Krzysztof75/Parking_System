@@ -12,12 +12,12 @@ package dkit_flow;
 /* class representing camera type reader
    with two read methods:
 - read(String); reads String as an input
--read(String Array) reads all elements in the array
+-read(String Array) reads String elements in the array
 */
 public class ExitCamera extends Camera{    
     
  /* parkingSystem is a reference to Parking System object, it is inherited from camera class
- * we need it so that we can send message (carID) to parkingSystem object   
+ * we need it so that we can send message send(carID) to parkingSystem object   
  */ 
     
     // constructor 
