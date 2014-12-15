@@ -57,32 +57,39 @@ public class Dkit_flowTest {
         parkingSystem.registerCamera(camEntry);
         parkingSystem.registerCamera(camExit);
         
+      //  This part is just for the simulation purposes only
+        
       //  Registering Subscriber
-//        Subscriber sub = new Subscriber("Krzysztof", "Gilewski","04LK298","090786876567", 0.0);
+        
+//        Subscriber sub1 = new Subscriber("Krzysztof", "Gilewski","04LK298","090786876567", 0.0);
 //        Subscriber sub2 = new Subscriber("Hardik", "Thakkar","11DP214","8764563564554", 0.0);
 //        Subscriber sub3 = new Subscriber("Dean", "McMahon", "12HG125","862542545426882", 0.0);
 //        Subscriber sub4 = new Subscriber("Gerry", "McGrane", "01JI527", "625645158451819", 0.0);
 //        Subscriber sub5 = new Subscriber("Tony", "McMarron", "LKP46789", "787575576567675", 0.0);
 //        Subscriber sub6 = new Subscriber("Jimmy", "NcNally", "01HF444","58585586585668586", 0.0);
 //        Subscriber sub7 = new Subscriber("Robert", "DeNiro", "02YL456", "7867568758548585", 0.0);
-//        parkingDB.registerSubscriber(sub);
+//        parkingDB.registerSubscriber(sub1);
 //        parkingDB.registerSubscriber(sub2);
 //        parkingDB.registerSubscriber(sub3);
 //        parkingDB.registerSubscriber(sub4);
 //        parkingDB.registerSubscriber(sub5);
 //        parkingDB.registerSubscriber(sub6);
-//        parkingDB.registerSubscriber(sub7);
+//        parkingDB.registerSubscriber(sub7);        
 //        
-//        
-//       //  vehicle enters the parking
+//       //  vehicles enters the parking
+        
 //        camEntry.read(incomingTrafficEntry1);
 //        System.out.println();
 //          camEntry.read(incomingTrafficEntry2);
 //        System.out.println();
 //        camEntry.read(incomingTrafficEntry3);
 //        System.out.println();
+        
+//        remove subscriber
+        
+//        parkingDB.removeSubscriber(sub3);
 
-//        
+//        // vehicles exiting the traffic
 //        camExit.read(outgoingTraffic1);
 //        System.out.println();
 //      
@@ -91,32 +98,37 @@ public class Dkit_flowTest {
 //       
 //        camExit.read(outgoingTraffic3);
 //        System.out.println();
-////        
-        User car = new User("04YK456");
         
-        for(int i = 0; i < parkingDB.getTraffic().size(); i++){
-            if(parkingDB.getTraffic().get(i).getCarID().equals(car.getCarID())){
-            car = parkingDB.getTraffic().get(i);
-            System.out.println("Car: " + car);
-        }
-        }
-        double charge = parkingDB.calculateCharge(car);
-        car.setBalance(charge);
-        System.out.println(charge);
-        parkingDB.updateBalance(car);
+//    Paying for the user if not subscriber
         
-        camExit.read("04YK456");
-//           camExit.read("04YK456");
-        for(User u : parkingDB.getTraffic())
-            System.out.println(u);
+//      User car = new User("12HA254");
         
-        System.out.println();
+//     find the rigt user in the arraylist tarffic   
         
-        for(Subscriber s : parkingDB.getSubscribers())
-            System.out.println(s);
+//        for(int i = 0; i < parkingDB.getTraffic().size(); i++){
+//            if(parkingDB.getTraffic().get(i).getCarID().equals(car.getCarID())){
+//            car = parkingDB.getTraffic().get(i);
+//            System.out.println("Car: " + car);
+//        }
+//        }
+//        double charge = parkingDB.calculateCharge(car);
+//        car.setBalance(charge);
+//        System.out.println(charge);
+//        parkingDB.updateBalance(car);   
+//        
+//      Single vehicle leaves the parking        
+        
+//          camExit.read("11DP214");
+        
+//     printing out the users from the traffic arraylist        
+        
+//        for(User u : parkingDB.getTraffic())
+//            System.out.println(u);
+        
+//        System.out.println();
         
         parkingDB.disconnect();
-//        
+       
       
     }
     

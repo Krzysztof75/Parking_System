@@ -124,7 +124,7 @@ public class ParkingSystem implements Parkable {
                 break;
             }
         }
-        user.setTimeOut(currentDate);
+      //  user.setTimeOut(currentDate);
         double balance = parkingDB.calculateCharge(user);
         if(balance == 0){
             user.setHasPaid(1);
@@ -137,7 +137,7 @@ public class ParkingSystem implements Parkable {
                     subscriber.setHasPaid(1);
                     parkingDB.updateBalance(subscriber, balance);
                     openGate(gates.get(1));
-                    setFreeSpaces(-1);
+                    setFreeSpaces(1);
                   //  parkingDB.exitTraffic(user);
                     break;
                 }

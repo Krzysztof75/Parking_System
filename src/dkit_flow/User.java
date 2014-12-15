@@ -41,15 +41,15 @@ public class User {
     }
     
     public User(String carID, String timeIN){
-         this();
+         this(carID);
          this.carID = carID;
          this.timeIn = timeIN;
     }
-    public User(String carID,String timeIN, String TimeOut, double balance){
+    public User(String carID,String timeIN, String TimeOut, double balance, int hasPaid){
         this(carID,timeIN);
         this.timeOut = TimeOut;
         this.balance = balance;
-        
+        this.hasPaid = hasPaid;
     }
     public int getHasPaid(){
         return hasPaid;
@@ -96,7 +96,7 @@ public class User {
     @Override
     public String toString(){
         // Return description of an object
-        return "CarID: " + this.carID + " Time in + " + this.timeIn + " Time out: " + this.timeOut + " balance: " + balance + "hasPaid: " + hasPaid;
+        return "CarID: " + this.carID + " Time in + " + this.timeIn + " Time out: " + this.timeOut + " balance: " + balance + " hasPaid: " + hasPaid;
     }
 
     /**

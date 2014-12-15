@@ -54,13 +54,14 @@ public class parkingDB {
         password = "";
         conn = null;
         connect();      // invoking connect() method of ParkingDB object in the constructor of ParkingDB
-        initSubscribers();
-        initTraffic();
+        initSubscribers();     // initialize subscribers arrayList with the values from database
+        initTraffic();         // initialize traffic List with the data from database (where hasPaid = 0)
     }
     // Connecting to the database through the driver
     // there is a try - catch block to catch number of Exceptions possible during connection and disconnection
     // Exceptions - objects created when problems, which JRE can't resolve happen while running programs 
-    // Exception handling lets developers handle such a problems in gracefull manner   
+    // Exception handling lets developers handle such a problems in gracefull manner 
+    
     /*
      this method establishes connection with the database
      */
@@ -80,7 +81,6 @@ public class parkingDB {
     /*
      method disconnecting from the database 
      */
-
     public static void disconnect() {
         try {
             getConn().close();
@@ -91,10 +91,10 @@ public class parkingDB {
             System.out.println("There is a problem disconnecting from the database");
         }
     }
-
+// register subscriber with the database
     public static void registerSubscriber(Subscriber s) {
 
-        System.out.println("Subscribing " + s.getFirstName());
+        System.out.println("Subscribing " + s.getFirstName() + s.getLastName());
 
         //identifying the columns in the table
         String[] columnNames = {"FirstName", "LastName", "carID", "accountNumber", "balance"};
@@ -154,10 +154,29 @@ public class parkingDB {
         }
         return isSubscriber;
     }
+// delete the subscriber from the subscriber table
+    public static void removeSubscriber(Subscriber s) {
+        
+         String delete = "DELETE FROM subscribers where carID='" + s.getCarID() + "'";
 
-    public void removeSubscriber() {
+        try {
+            statement = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+                    ResultSet.CONCUR_UPDATABLE);
+            System.out.println("Executing remove subscriber  method");
+            statement.executeUpdate(delete);
 
-        // selete the subscriber from the subscriber table
+            // remove the subscriber from the subscriber arrayList
+            for(int i = 0; i < subscribers.size(); i++){
+                if(s.getCarID().equals(subscribers.get(i).getCarID())){
+                subscribers.remove(i);
+            }
+            }
+            System.out.println("Removing subscriber " + s.getFirstName() + " " + s.getLastName() + "from subscribers");
+
+        } catch (SQLException e) {
+            System.out.println("There is a problem with isSubscriber querry");
+            e.printStackTrace();
+        }
     }
 
     public static double getBalance(User u) {
@@ -267,7 +286,6 @@ public class parkingDB {
         inputValues[1] = currentDate;
         inputValues[2] = u.getHasPaid();
 
-        // prepare blob object from an existing binary column
         String insert = "insert into traffic (CarID,DateIn,hasPaid) values(?,?,?)";
 
         try {
@@ -373,7 +391,7 @@ public class parkingDB {
 
     public static void initTraffic() {
         try {
-            String query = "SELECT CarID, DateIn, DateOut, balance FROM traffic";
+            String query = "SELECT CarID, DateIn, DateOut, balance, hasPaid FROM traffic WHERE hasPaid = 0";
             // create the java statement
             statement = conn.createStatement();
             resultSet = statement.executeQuery(query);
@@ -382,7 +400,8 @@ public class parkingDB {
                 String DateIn = resultSet.getString("DateIn");
                 String DateOut = resultSet.getString("DateOut");
                 double balance = resultSet.getDouble("balance");
-                User user = new User(carID, DateIn, DateOut, balance);
+                int hasPaid = resultSet.getInt("hasPaid");
+                User user = new User(carID, DateIn, DateOut, balance, hasPaid);
                 traffic.add(user);
             }
 
@@ -407,7 +426,7 @@ public class parkingDB {
                 double balance = resultSet.getDouble("balance");
                 Subscriber subscriber = new Subscriber(FirstName, LastName, carID, accountNumber, balance);
                 subscribers.add(subscriber);
-                System.out.println("ID: " + ID + " FisrtName: " + FirstName + " LastName: " + LastName + " carID " + carID + " balance: " + balance);
+                System.out.println("ID: " + ID + " FirstName: " + FirstName + " LastName: " + LastName + " carID " + carID + " balance: " + balance);
             }
 
         } catch (SQLException e) {
