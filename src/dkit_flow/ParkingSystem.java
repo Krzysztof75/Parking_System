@@ -26,11 +26,11 @@ public class ParkingSystem implements Parkable {
      */
     private final ArrayList<Displayable> panels;      // array holding references to the display panels
     private final ArrayList<Gate> gates;                  // array holding references to the gates
-    private final ArrayList<EntryCamera> entryCameras;     // array holding references to the EntryCameras
-    private final ArrayList<ExitCamera> exitCameras;       // array holding references to the ExitCameras
+    private final ArrayList<iSensor> entryCameras;     // array holding references to the EntryCameras
+    private final ArrayList<iSensor> exitCameras;       // array holding references to the ExitCameras
     private static int freeSpace = 928;         // number of ramaining free spaces static means variable is schared among other objects
     private User user;                          // this object will store information of each car entering parking
-    public parkingDB dataBase;                        // reference to database
+    public iDataBase dataBase;                        // reference to database
 
     public ParkingSystem() {
         panels = new ArrayList<>();
@@ -95,14 +95,14 @@ public class ParkingSystem implements Parkable {
 
         User user = new User(camera.getCarID());
         // check if subscribed than assign hasPaid boolean = true
-        if (parkingDB.isSubscriber(user)) {
+        if (this.dataBase.isSubscriber(user)) {
              System.out.println(camera.getCarID() + " is subscriber");
         } else {
            System.out.println("This is paid parking if you don't want to use it leave within 30min");
         }
         System.out.println("User entering the parking " + user);
         parkingDB.getTraffic().add(user);
-        parkingDB.insertTraffic(user);
+        this.dataBase.insertTraffic(user);
         openGate(gates.get(0));
         setFreeSpaces(-1);
 
@@ -125,17 +125,17 @@ public class ParkingSystem implements Parkable {
             }
         }
       //  user.setTimeOut(currentDate);
-        double balance = parkingDB.calculateCharge(user);
+        double balance = dataBase.calculateCharge(user);
         if(balance == 0){
             user.setHasPaid(1);
         }
         Subscriber subscriber;
-        if(parkingDB.isSubscriber(user)){
+        if(this.dataBase.isSubscriber(user)){
             for (Subscriber sub : parkingDB.getSubscribers()) {
                 if (user.getCarID().equals(sub.getCarID())) {
                     subscriber = sub;
                     subscriber.setHasPaid(1);
-                    parkingDB.updateBalance(subscriber, balance);
+                    this.dataBase.updateBalance(subscriber, balance);
                     openGate(gates.get(1));
                     setFreeSpaces(1);
                   //  parkingDB.exitTraffic(user);
@@ -145,7 +145,7 @@ public class ParkingSystem implements Parkable {
         } else if(user.getHasPaid() == 1){
            openGate(gates.get(1));
            setFreeSpaces(-1);
-           parkingDB.exitTraffic(user);
+           dataBase.exitTraffic(user);
         }else{
             
             System.out.println("You need to pay before you can leave the parking");
@@ -159,17 +159,25 @@ public class ParkingSystem implements Parkable {
         
     }
 
-    public void backupTraffic() throws IOException {
-        DateFormat dateFormat = new SimpleDateFormat("yyyy:MM:dd HH:mm:ss");
-        Calendar cal = Calendar.getInstance();
-        String currentDate = dateFormat.format(cal.getTime());
-        ArrayList traffic = parkingDB.getTraffic();
+    public void backUpTraffic() throws IOException {
+        
+        ArrayList traffic = parkingDB.getBackUpTraffic();
+  
+        String tr;
         try {
-            File file = new File("Text file + " + currentDate + ".txt");
-            FileWriter fileWrit = new FileWriter(file);
+            File file = new File( "parkingBackUp.txt");
+            try (FileWriter fileWriter = new FileWriter(file)) {
+                for (Object traffic1 : traffic) {
+                    tr = traffic1.toString();
+                    fileWriter.write(tr);
+                    fileWriter.write(System.lineSeparator()); //new line
+                    fileWriter.flush();
+                }
+            }
 
         } catch (FileNotFoundException e) {
             System.out.println("There is a problem writing to a file");
+            e.printStackTrace();
         }
     }
 

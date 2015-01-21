@@ -16,17 +16,32 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 /**
  *
  * @author Kris
  */
-public class parkingDB {
+public class parkingDB implements iDataBase{
 
     // this array will hold The most recent information from traffic table
     // this array will hold the most recent information from subscriber table
     private static ArrayList<Subscriber> subscribers = new ArrayList<>();
     private static ArrayList<User> traffic = new ArrayList<>();                          // we can store here all info from the table traffic
+
+    /**
+     * @return the subscribers
+     */
+    public static ArrayList<Subscriber> getSubscribers() {
+        return subscribers;
+    }
+
+    /**
+     * @return the traffic
+     */
+    public static ArrayList<User> getTraffic() {
+        return traffic;
+    }
     boolean startUp = false;
     
     
@@ -81,7 +96,7 @@ public class parkingDB {
     /*
      method disconnecting from the database 
      */
-    public static void disconnect() {
+    public void disconnect() {
         try {
             getConn().close();
             //if disconnection successful display
@@ -92,7 +107,7 @@ public class parkingDB {
         }
     }
 // register subscriber with the database
-    public static void registerSubscriber(Subscriber s) {
+    public void registerSubscriber(Subscriber s) {
 
         System.out.println("Subscribing " + s.getFirstName() + s.getLastName());
 
@@ -132,7 +147,8 @@ public class parkingDB {
     }
     // this method queries the data base if there is such a car registration number in the subscriber table
     // if there is return true
-    public static boolean isSubscriber(User u) {
+    @Override
+    public boolean isSubscriber(User u) {
         boolean isSubscriber = false;
 
         String sql = "SELECT firstName FROM subscribers where carID='" + u.getCarID() + "'";
@@ -155,7 +171,7 @@ public class parkingDB {
         return isSubscriber;
     }
 // delete the subscriber from the subscriber table
-    public static void removeSubscriber(Subscriber s) {
+    public void removeSubscriber(Subscriber s) {
         
          String delete = "DELETE FROM subscribers where carID='" + s.getCarID() + "'";
 
@@ -166,9 +182,9 @@ public class parkingDB {
             statement.executeUpdate(delete);
 
             // remove the subscriber from the subscriber arrayList
-            for(int i = 0; i < subscribers.size(); i++){
-                if(s.getCarID().equals(subscribers.get(i).getCarID())){
-                subscribers.remove(i);
+            for(int i = 0; i < getSubscribers().size(); i++){
+                if(s.getCarID().equals(getSubscribers().get(i).getCarID())){
+                    getSubscribers().remove(i);
             }
             }
             System.out.println("Removing subscriber " + s.getFirstName() + " " + s.getLastName() + "from subscribers");
@@ -179,7 +195,7 @@ public class parkingDB {
         }
     }
 
-    public static double getBalance(User u) {
+    public double getBalance(User u) {
         double balance = 0;
         try {
             statement = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
@@ -203,7 +219,7 @@ public class parkingDB {
         return balance;
     }
 
-    public static void updateBalance(User u) {
+    public void updateBalance(User u) {
         // get user balance
         // search for that user in the traffic list
 //        for (int i = 0; i < traffic.size(); i++) {
@@ -232,7 +248,7 @@ public class parkingDB {
         }
     }
 
-    public static double updateBalance(Subscriber s, double charge) {
+    public double updateBalance(Subscriber s, double charge) {
 
         double balance = getBalance(s) + charge;
         System.out.println("Present balance: " + getBalance(s) + " charge: " + charge);
@@ -274,7 +290,8 @@ public class parkingDB {
         return balance;
     }
 
-    public static void insertTraffic(User u) {
+    @Override
+    public void insertTraffic(User u) {
 
         System.out.println("insertTraffic method in ParkingDB: " + u);
 
@@ -306,10 +323,10 @@ public class parkingDB {
         // insert record into the traffic table 
     }
 
-    public static void exitTraffic(User u) {
+    public void exitTraffic(User u) {
         System.out.println("exitVehicle method in parkingDB: " + u.getCarID());
         
-        for(User us: traffic){
+        for(User us: getTraffic()){
             if(us.getCarID().equals(u.getCarID())){
             u = us;
                 break;
@@ -333,7 +350,7 @@ public class parkingDB {
 
     }
 
-    public static double calculateCharge(User u) {
+    public double calculateCharge(User u) {
 
         double charge = 0.0;
         
@@ -402,13 +419,37 @@ public class parkingDB {
                 double balance = resultSet.getDouble("balance");
                 int hasPaid = resultSet.getInt("hasPaid");
                 User user = new User(carID, DateIn, DateOut, balance, hasPaid);
-                traffic.add(user);
+                getTraffic().add(user);
             }
 
         } catch (SQLException e) {
             System.out.println("There is a problem with getting traffic list");
             e.printStackTrace();
         }
+    }
+    
+     public static ArrayList getBackUpTraffic() {
+         ArrayList<User>t = new ArrayList<>();
+        try {
+            String query = "SELECT CarID, DateIn, DateOut, balance, hasPaid FROM traffic";
+            // create the java statement
+            statement = conn.createStatement();
+            resultSet = statement.executeQuery(query);
+            while (resultSet.next()) {
+                String carID = resultSet.getString("carID");
+                String DateIn = resultSet.getString("DateIn");
+                String DateOut = resultSet.getString("DateOut");
+                double balance = resultSet.getDouble("balance");
+                int hasPaid = resultSet.getInt("hasPaid");
+                User user = new User(carID, DateIn, DateOut, balance, hasPaid);
+                t.add(user);
+            }
+
+        } catch (SQLException e) {
+            System.out.println("There is a problem with getting traffic list");
+            e.printStackTrace();
+        }
+        return t;
     }
   public static void initSubscribers(){
       try{
@@ -425,7 +466,7 @@ public class parkingDB {
                 String accountNumber = resultSet.getString("accountNumber");
                 double balance = resultSet.getDouble("balance");
                 Subscriber subscriber = new Subscriber(FirstName, LastName, carID, accountNumber, balance);
-                subscribers.add(subscriber);
+                getSubscribers().add(subscriber);
                 System.out.println("ID: " + ID + " FirstName: " + FirstName + " LastName: " + LastName + " carID " + carID + " balance: " + balance);
             }
 
@@ -518,16 +559,5 @@ public class parkingDB {
     public void setConn(Connection conn) {
         parkingDB.conn = conn;
     }
-
-    /**
-     * @return the subscribers
-     */
-    
-    public static ArrayList<User>getTraffic(){
-        return traffic;
-    }
-    
-    public static ArrayList<Subscriber> getSubscribers() {
-        return subscribers;
-    }
 }
+ 

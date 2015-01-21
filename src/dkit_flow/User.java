@@ -96,7 +96,7 @@ public class User {
     @Override
     public String toString(){
         // Return description of an object
-        return "CarID: " + this.carID + " Time in + " + this.timeIn + " Time out: " + this.timeOut + " balance: " + balance + " hasPaid: " + hasPaid;
+        return "CarID: " + this.carID + " Time in " + this.timeIn + " Time out: " + this.timeOut + " balance: " + balance + " hasPaid: " + hasPaid;
     }
 
     /**

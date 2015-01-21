@@ -5,7 +5,10 @@
  */
 package dkit_flow;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -61,49 +64,50 @@ public class Dkit_flowTest {
         
       //  Registering Subscriber
         
-//        Subscriber sub1 = new Subscriber("Krzysztof", "Gilewski","04LK298","090786876567", 0.0);
-//        Subscriber sub2 = new Subscriber("Hardik", "Thakkar","11DP214","8764563564554", 0.0);
-//        Subscriber sub3 = new Subscriber("Dean", "McMahon", "12HG125","862542545426882", 0.0);
-//        Subscriber sub4 = new Subscriber("Gerry", "McGrane", "01JI527", "625645158451819", 0.0);
-//        Subscriber sub5 = new Subscriber("Tony", "McMarron", "LKP46789", "787575576567675", 0.0);
-//        Subscriber sub6 = new Subscriber("Jimmy", "NcNally", "01HF444","58585586585668586", 0.0);
-//        Subscriber sub7 = new Subscriber("Robert", "DeNiro", "02YL456", "7867568758548585", 0.0);
-//        parkingDB.registerSubscriber(sub1);
-//        parkingDB.registerSubscriber(sub2);
-//        parkingDB.registerSubscriber(sub3);
-//        parkingDB.registerSubscriber(sub4);
-//        parkingDB.registerSubscriber(sub5);
-//        parkingDB.registerSubscriber(sub6);
-//        parkingDB.registerSubscriber(sub7);        
+        Subscriber sub1 = new Subscriber("Krzysztof", "Gilewski","04LK298","090786876567", 0.0);
+        Subscriber sub2 = new Subscriber("Hardik", "Thakkar","11DP214","8764563564554", 0.0);
+        Subscriber sub3 = new Subscriber("Dean", "McMahon", "12HG125","862542545426882", 0.0);
+        Subscriber sub4 = new Subscriber("Gerry", "McGrane", "01JI527", "625645158451819", 0.0);
+        Subscriber sub5 = new Subscriber("Tony", "McMarron", "LKP46789", "787575576567675", 0.0);
+        Subscriber sub6 = new Subscriber("Jimmy", "NcNally", "01HF444","58585586585668586", 0.0);
+        Subscriber sub7 = new Subscriber("Robert", "DeNiro", "02YL456", "7867568758548585", 0.0);
+        parkingSystem.dataBase.registerSubscriber(sub1);
+        parkingSystem.dataBase.registerSubscriber(sub2);
+        parkingSystem.dataBase.registerSubscriber(sub3);
+        parkingSystem.dataBase.registerSubscriber(sub4);
+        parkingSystem.dataBase.registerSubscriber(sub5);
+        parkingSystem.dataBase.registerSubscriber(sub6);
+        parkingSystem.dataBase.registerSubscriber(sub7);        
 //        
 //       //  vehicles enters the parking
         
-//        camEntry.read(incomingTrafficEntry1);
-//        System.out.println();
-//          camEntry.read(incomingTrafficEntry2);
-//        System.out.println();
-//        camEntry.read(incomingTrafficEntry3);
-//        System.out.println();
+        camEntry.read(incomingTrafficEntry1);
+        System.out.println();
+          camEntry.read(incomingTrafficEntry2);
+        System.out.println();
+        camEntry.read(incomingTrafficEntry3);
+        System.out.println();
         
-//        remove subscriber
-        
+      
+            //        remove subscriber
+            
 //        parkingDB.removeSubscriber(sub3);
 
-//        // vehicles exiting the traffic
-//        camExit.read(outgoingTraffic1);
-//        System.out.println();
-//      
-//        camExit.read(outgoingTraffic2);
-//        System.out.println();
-//       
-//        camExit.read(outgoingTraffic3);
-//        System.out.println();
+        // vehicles exiting the traffic
+        camExit.read(outgoingTraffic1);
+        System.out.println();
+      
+        camExit.read(outgoingTraffic2);
+        System.out.println();
+       
+        camExit.read(outgoingTraffic3);
+        System.out.println();
         
 //    Paying for the user if not subscriber
         
 //      User car = new User("12HA254");
-        
-//     find the rigt user in the arraylist tarffic   
+            
+//     find the rigt user in the arraylist tarffic
         
 //        for(int i = 0; i < parkingDB.getTraffic().size(); i++){
 //            if(parkingDB.getTraffic().get(i).getCarID().equals(car.getCarID())){
@@ -114,20 +118,25 @@ public class Dkit_flowTest {
 //        double charge = parkingDB.calculateCharge(car);
 //        car.setBalance(charge);
 //        System.out.println(charge);
-//        parkingDB.updateBalance(car);   
-//        
-//      Single vehicle leaves the parking        
+//        parkingDB.updateBalance(car);
+//
+//      Single vehicle leaves the parking
         
 //          camExit.read("11DP214");
-        
-//     printing out the users from the traffic arraylist        
+            
+//     printing out the users from the traffic arraylist
         
 //        for(User u : parkingDB.getTraffic())
 //            System.out.println(u);
         
 //        System.out.println();
+        try{   
+            parkingSystem.backUpTraffic();
+        } catch (IOException ex) {
+            Logger.getLogger(Dkit_flowTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
-        parkingDB.disconnect();
+        parkingSystem.dataBase.disconnect();
        
       
     }

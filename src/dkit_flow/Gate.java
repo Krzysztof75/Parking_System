@@ -13,8 +13,8 @@ public class Gate {
     private final ParkingSystem parkingSystem;       // we use this to link register gate with ParkingSystem object 
     private String gateID;
     
-    public Gate(ParkingSystem parkingSystem){
-        this.parkingSystem = parkingSystem;
+    public Gate(Parkable pS){
+        this.parkingSystem = (ParkingSystem)pS;
         
     }
     
