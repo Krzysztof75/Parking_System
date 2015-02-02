@@ -2,10 +2,8 @@
 Author: Krzysztof Gilewski
 This is unfinished project!
 This is my proposition for an automated parking system.
-This system suppose to automatically collect information about the users of the parking facility, calculate the appropriate
-charge, update the balance, store the traffic information as well as subscribed users in the data base, ensure the 
-charge is paid before allowing to leave the facility, allow to implement subscribing option.   
-
+This system automatically collects information about the users of the parking facility, calculates the appropriate charge, updates the balance, stores the traffic information as well as subscribed users in the data base, ensures the 
+charge is paid before allowing the user to leave the facility, allows to implement subscribing option.   
 
 The system consists of following classes and interfaces:
 
@@ -39,8 +37,7 @@ interface Displayable - provide contract consisting of 2 methods:
 - update(int i);
 
 DisplayPanel class - implements Displayable, displays the current number of free spaces at the parking lot as well as 
-messages sent to it. I used observer pattern to monitor the changes to the freeSpaces variable in parkingSystem object 
-(subject) and automatically update the diplay to reflect current number of freeSpaces at the parking lot.
+messages sent to it. I used observer pattern to monitor the changes to the freeSpaces variable in parkingSystem object (subject) and automatically update the diplay to reflect current number of freeSpaces at the parking lot.
 instance variables:
 ParkingSystem parkingSystem;
 int freeSpaces;
@@ -58,6 +55,8 @@ Gate class - simulates gate with the assumption that there is an automated mecha
 instance variables:
 - ParkingSystem parkingSystem;
 - String gateID;
+constructor:
+public gate(Parkable pS)
 methods:
 - void open();
 - void setGateID(String s);
@@ -95,5 +94,89 @@ instance variables:
 - String adress();
 - String accountNumber
 
+interface Parkable - ensure constract for the following methods:
+- void registerDisplayPanel(Displayable d);
+- void removeDisplayPanel(Displayable d);
+- void updateDisplayable(int freeSpace); 
+- void registerGate(Gate g);
+- void removeGate(Gate g);
+- void registerCamera(iSensor is);
+- void removeCamera(iSensor is);
 
+ParkingSystem class : implements Parkable, controls the operation of the parking lot
+class variables:
+- int freeSpaces;
+instatnce variables:
+- private final ArrayList<Displayable> panels;
+- private final ArrayList<Gate> gates;                 
+- private final ArrayList<iSensor> entryCameras;    
+- private final ArrayList<iSensor> exitCameras;       
+- private static int freeSpace = 928;         
+- private User user;                         
+- public iDataBase dataBase; 
+construcor::
+public ParkingSystem();
+methods:
+- void registerDisplayPanel(Displayable p);
+- void removeDisplayPanel(Displayable p);
+- void updateDisplayable(int freeSpace);
+- void registerGate(Gate g)
+- void removeGate(Gate g);
+- void registerCamera(iSensor sensor);
+- void removeCamera(iSensor sensor);
+- void setCarID(EntryCamera camera);
+- void setCarID(ExitCamera c);
+- void backUpTraffic() throws IOException     - write the information about the parking usage (traffic) in the file
+- void setFreeSpaces(int a);
+- int getFreeSpaces();
+- boolean verifySubscriber(User u);
+- void openGate(Gate g);
+
+interface iDabatBase  - ensure contract for the following methods:
+- void connect();
+- void disconnect();
+- void registerSubscriber(Subscriber s);
+- boolean isSubscriber(User u);
+- void removeSubscriber(Subscriber s);
+- double getBalance(User u);
+- void updateBalance(User u);
+- double updateBalance(Subscriber s, double charge);
+- void insertTraffic(User u);
+- void exitTraffic(User u);
+- double calculateCharge(User u);
+
+class parkingDB - implements iDataBase, takes care of the connection to the data base and communication with it through build in queries
+class instance:
+- private static ArrayList<Subscriber> subscribers;
+- private static ArrayList<User> traffic;
+constructor:
+public parkingDB();
+methods:
+- static ArrayList<Subscriber> getSubscribers();
+- static ArrayList<User> getTraffic()
+- void connect();
+- void disconnect();
+- void registerSubscriber(Subscriber s);
+- void removeSubscriber(Subscriber s);
+- boolean isSubscriber(User u);
+- double getBalance(User u);
+- void updateBalance(User u);
+- double updateBalance(Subscriber s, double charge);
+- void insertTraffic(User u);
+- void exitTraffic(User u);
+- double calculateCharge(User u);
+- static void initTraffic();
+- static void initSubscribers();
+- String getUrl();
+- void setUrl(String url);
+- String getDbName();
+- void setDbName(String dbName);
+- String getDriver();
+- void setDriver(String driver);
+- String getUserName();
+- void setUserName(String userName);
+- String getPassword();
+- void setPassword(String password);
+- static Connection getConn();
+- void setConn(Connection conn);
 
