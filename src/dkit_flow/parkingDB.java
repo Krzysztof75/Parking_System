@@ -81,7 +81,8 @@ public class parkingDB implements iDataBase{
      this method establishes connection with the database
      */
 
-    public final void connect() {
+    @Override
+    public void connect() {
         try {
             Class.forName(getDriver()).newInstance();
             //passing the privare variables declared above to connect to the database
@@ -96,6 +97,7 @@ public class parkingDB implements iDataBase{
     /*
      method disconnecting from the database 
      */
+    @Override
     public void disconnect() {
         try {
             getConn().close();
@@ -107,6 +109,7 @@ public class parkingDB implements iDataBase{
         }
     }
 // register subscriber with the database
+    @Override
     public void registerSubscriber(Subscriber s) {
 
         System.out.println("Subscribing " + s.getFirstName() + s.getLastName());
@@ -171,6 +174,7 @@ public class parkingDB implements iDataBase{
         return isSubscriber;
     }
 // delete the subscriber from the subscriber table
+    @Override
     public void removeSubscriber(Subscriber s) {
         
          String delete = "DELETE FROM subscribers where carID='" + s.getCarID() + "'";
@@ -195,6 +199,7 @@ public class parkingDB implements iDataBase{
         }
     }
 
+    @Override
     public double getBalance(User u) {
         double balance = 0;
         try {
@@ -219,17 +224,18 @@ public class parkingDB implements iDataBase{
         return balance;
     }
 
+    @Override
     public void updateBalance(User u) {
         // get user balance
         // search for that user in the traffic list
-//        for (int i = 0; i < traffic.size(); i++) {
-//            if (traffic.get(i).getCarID().equals(u.getCarID())) {
-//                u = traffic.get(i);
-//                u.setHasPaid(1);
-//                System.out.println("Seting hasPaid to 1 in updateBalance (user)");
-//                break;
-//            }  
-//        }
+        for (int i = 0; i < traffic.size(); i++) {
+            if (traffic.get(i).getCarID().equals(u.getCarID())) {
+                u = traffic.get(i);
+                u.setHasPaid(1);
+                System.out.println("Seting hasPaid to 1 in updateBalance (user)");
+                break;
+            }  
+        }
         try {
 
             statement = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
@@ -248,6 +254,7 @@ public class parkingDB implements iDataBase{
         }
     }
 
+    @Override
     public double updateBalance(Subscriber s, double charge) {
 
         double balance = getBalance(s) + charge;
@@ -271,7 +278,6 @@ public class parkingDB implements iDataBase{
             statement.executeUpdate(sql);
             System.out.println("Executing update traffic method");
 
-            // update balance in the traffic table or if Subscriber update balance in the subscriber table
             System.out.println("Paid for " + s.getCarID());
         } catch (SQLException e) {
             System.out.println("There is a problem with balance update traffic query");
@@ -319,10 +325,9 @@ public class parkingDB implements iDataBase{
             e.printStackTrace();
             e.toString();
         }
-
-        // insert record into the traffic table 
     }
 
+    @Override
     public void exitTraffic(User u) {
         System.out.println("exitVehicle method in parkingDB: " + u.getCarID());
         
@@ -350,6 +355,7 @@ public class parkingDB implements iDataBase{
 
     }
 
+    @Override
     public double calculateCharge(User u) {
 
         double charge = 0.0;

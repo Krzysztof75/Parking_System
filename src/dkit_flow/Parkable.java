@@ -13,7 +13,7 @@ public interface Parkable {
     
     // this interface sets methods for registering/removing elements
     
-    public void registerDisplayPanel(Displayable d) throws Exception;
+    public void registerDisplayPanel(Displayable d);
     public void removeDisplayPanel(Displayable d);
     public void updateDisplayable(int freeSpace); 
     public void registerGate(Gate g);

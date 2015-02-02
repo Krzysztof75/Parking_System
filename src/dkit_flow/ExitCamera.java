@@ -17,7 +17,7 @@ package dkit_flow;
 public class ExitCamera extends Camera{    
     
  /* parkingSystem is a reference to Parking System object, it is inherited from camera class
- * we need it so that we can send message send(carID) to parkingSystem object   
+ *  it is used to send carID to parkingSystem object   
  */ 
     
     // constructor 

@@ -28,7 +28,7 @@ public class ParkingSystem implements Parkable {
     private final ArrayList<Gate> gates;                  // array holding references to the gates
     private final ArrayList<iSensor> entryCameras;     // array holding references to the EntryCameras
     private final ArrayList<iSensor> exitCameras;       // array holding references to the ExitCameras
-    private static int freeSpace = 928;         // number of ramaining free spaces static means variable is schared among other objects
+    private static int freeSpace = 928;         // number of ramaining free spaces static means variable is shared among other objects
     private User user;                          // this object will store information of each car entering parking
     public iDataBase dataBase;                        // reference to database
 

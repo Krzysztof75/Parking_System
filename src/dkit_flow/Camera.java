@@ -21,8 +21,8 @@ public abstract class Camera implements iSensor{
         this.send(carID);                     // look for the implementation of send method in Entry and Exit cameras  
     }
     
-    public void read(String [] reg){          // read method taking String array as an argument
-     
+    public void read(String [] reg){           // read method taking String array as an argument it loops than through the array and invoke send() 
+                                               // method on each String value
          for(int i = 0; i < reg.length; i++){
              setCarID(reg[i]);
              System.out.println("invoking read method from abstract Camera class");
