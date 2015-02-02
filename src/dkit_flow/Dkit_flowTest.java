@@ -71,13 +71,13 @@ public class Dkit_flowTest {
         Subscriber sub5 = new Subscriber("Tony", "McMarron", "LKP46789", "787575576567675", 0.0);
         Subscriber sub6 = new Subscriber("Jimmy", "NcNally", "01HF444","58585586585668586", 0.0);
         Subscriber sub7 = new Subscriber("Robert", "DeNiro", "02YL456", "7867568758548585", 0.0);
-        parkingSystem.dataBase.registerSubscriber(sub1);
-        parkingSystem.dataBase.registerSubscriber(sub2);
-        parkingSystem.dataBase.registerSubscriber(sub3);
-        parkingSystem.dataBase.registerSubscriber(sub4);
-        parkingSystem.dataBase.registerSubscriber(sub5);
-        parkingSystem.dataBase.registerSubscriber(sub6);
-        parkingSystem.dataBase.registerSubscriber(sub7);        
+        parkingSystem.getDataBase().registerSubscriber(sub1);
+        parkingSystem.getDataBase().registerSubscriber(sub2);
+        parkingSystem.getDataBase().registerSubscriber(sub3);
+        parkingSystem.getDataBase().registerSubscriber(sub4);
+        parkingSystem.getDataBase().registerSubscriber(sub5);
+        parkingSystem.getDataBase().registerSubscriber(sub6);
+        parkingSystem.getDataBase().registerSubscriber(sub7);        
 //        
 //       //  vehicles enters the parking
         
@@ -88,10 +88,8 @@ public class Dkit_flowTest {
         camEntry.read(incomingTrafficEntry3);
         System.out.println();
         
-      
-            //        remove subscriber
-            
-//        parkingDB.removeSubscriber(sub3);
+//        remove subscriber
+        parkingSystem.getDataBase().removeSubscriber(sub3);
 
         // vehicles exiting the traffic
         camExit.read(outgoingTraffic1);
@@ -103,12 +101,10 @@ public class Dkit_flowTest {
         camExit.read(outgoingTraffic3);
         System.out.println();
         
-//    Paying for the user if not subscriber
-        
+//    Paying for the user if not subscriber      
 //      User car = new User("12HA254");
             
-//     find the rigt user in the arraylist tarffic
-        
+//     find the rigt user in the arraylist tarffic       
 //        for(int i = 0; i < parkingDB.getTraffic().size(); i++){
 //            if(parkingDB.getTraffic().get(i).getCarID().equals(car.getCarID())){
 //            car = parkingDB.getTraffic().get(i);
@@ -119,9 +115,9 @@ public class Dkit_flowTest {
 //        car.setBalance(charge);
 //        System.out.println(charge);
 //        parkingDB.updateBalance(car);
-//
-//      Single vehicle leaves the parking
+
         
+//      Single vehicle leaves the parking       
 //          camExit.read("11DP214");
             
 //     printing out the users from the traffic arraylist
@@ -130,13 +126,14 @@ public class Dkit_flowTest {
 //            System.out.println(u);
         
 //        System.out.println();
+        
         try{   
             parkingSystem.backUpTraffic();
         } catch (IOException ex) {
             Logger.getLogger(Dkit_flowTest.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        parkingSystem.dataBase.disconnect();
+        parkingSystem.getDataBase().disconnect();
        
       
     }

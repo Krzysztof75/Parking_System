@@ -30,7 +30,7 @@ public class ParkingSystem implements Parkable {
     private final ArrayList<iSensor> exitCameras;       // array holding references to the ExitCameras
     private static int freeSpace = 928;         // number of ramaining free spaces static means variable is shared among other objects
     private User user;                          // this object will store information of each car entering parking
-    public iDataBase dataBase;                        // reference to database
+    private final iDataBase dataBase;                        // reference to database
 
     public ParkingSystem() {
         panels = new ArrayList<>();
@@ -95,14 +95,14 @@ public class ParkingSystem implements Parkable {
 
         User user = new User(camera.getCarID());
         // check if subscribed than assign hasPaid boolean = true
-        if (this.dataBase.isSubscriber(user)) {
+        if (this.getDataBase().isSubscriber(user)) {
              System.out.println(camera.getCarID() + " is subscriber");
         } else {
            System.out.println("This is paid parking if you don't want to use it leave within 30min");
         }
         System.out.println("User entering the parking " + user);
         parkingDB.getTraffic().add(user);
-        this.dataBase.insertTraffic(user);
+        this.getDataBase().insertTraffic(user);
         openGate(gates.get(0));
         setFreeSpaces(-1);
 
@@ -125,17 +125,17 @@ public class ParkingSystem implements Parkable {
             }
         }
       //  user.setTimeOut(currentDate);
-        double balance = dataBase.calculateCharge(user);
+        double balance = getDataBase().calculateCharge(user);
         if(balance == 0){
             user.setHasPaid(1);
         }
         Subscriber subscriber;
-        if(this.dataBase.isSubscriber(user)){
+        if(this.getDataBase().isSubscriber(user)){
             for (Subscriber sub : parkingDB.getSubscribers()) {
                 if (user.getCarID().equals(sub.getCarID())) {
                     subscriber = sub;
                     subscriber.setHasPaid(1);
-                    this.dataBase.updateBalance(subscriber, balance);
+                    this.getDataBase().updateBalance(subscriber, balance);
                     openGate(gates.get(1));
                     setFreeSpaces(1);
                   //  parkingDB.exitTraffic(user);
@@ -145,7 +145,7 @@ public class ParkingSystem implements Parkable {
         } else if(user.getHasPaid() == 1){
            openGate(gates.get(1));
            setFreeSpaces(-1);
-           dataBase.exitTraffic(user);
+            getDataBase().exitTraffic(user);
         }else{
             
             System.out.println("You need to pay before you can leave the parking");
@@ -162,10 +162,16 @@ public class ParkingSystem implements Parkable {
     public void backUpTraffic() throws IOException {
         
         ArrayList traffic = parkingDB.getBackUpTraffic();
+        
+        DateFormat dateFormat = new SimpleDateFormat("yyyy:MM:dd HH:mm:ss");
+        Calendar cal = Calendar.getInstance();
+        String currentDate = dateFormat.format(cal.getTime());
+        
+        String date = currentDate.replace(':', '.').replace(' ', '_');
   
         String tr;
         try {
-            File file = new File( "parkingBackUp.txt");
+            File file = new File( date + ".txt");
             try (FileWriter fileWriter = new FileWriter(file)) {
                 for (Object traffic1 : traffic) {
                     tr = traffic1.toString();
@@ -200,6 +206,13 @@ public class ParkingSystem implements Parkable {
 
     public void openGate(Gate g) {
         g.open();
+    }
+
+    /**
+     * @return the dataBase
+     */
+    public iDataBase getDataBase() {
+        return dataBase;
     }
 
 }
