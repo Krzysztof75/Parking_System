@@ -6,7 +6,7 @@
 package dkit_flow;
 
 /**
- *
+ * 
  * @author Kris
  */
 public abstract class Camera implements iSensor{
