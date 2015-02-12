@@ -5,12 +5,14 @@
  */
 package dkit_flow;
 
+import java.util.Objects;
+
 /**
- *
+ * instance variables of this class store information about subscribed users
  * @author Kris
  */
 // Take note that Subscriber inherits String carID and double balance from User
-public class Subscriber extends User {
+public final class Subscriber extends User {
     private String FirstName;
     private String LastName;
     private String adress;
@@ -18,15 +20,30 @@ public class Subscriber extends User {
     private String phone;
     
     //default user spec constructor
-    public Subscriber(){
+
+    /**
+     *
+     */
+        public Subscriber(){
         super();
     }
-    
+    /**
+     * 
+     * @param u - user 
+     */
     public Subscriber(User u){
         super(u.getCarID());
     }
     
-    //user spec constructor taking several arguments 
+   
+    /**
+     * 
+     * @param FirstName
+     * @param LastName
+     * @param carID
+     * @param account
+     * @param balance 
+     */
     public Subscriber(String FirstName, String LastName, String carID, String account, double balance){
         // invoking super class User constructor to initiate various instance variables
         super(carID);
@@ -52,6 +69,17 @@ public class Subscriber extends User {
         Subscriber other = (Subscriber) o;
         return (other.getCarID().equals(this.getCarID()) && other.getFirstName().equals(this.getFirstName())
                 && other.getLastName().equals(this.getLastName()) && other.getAccountNumber().equals(other.getAccountNumber()));
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 37 * hash + Objects.hashCode(this.FirstName);
+        hash = 37 * hash + Objects.hashCode(this.LastName);
+        hash = 37 * hash + Objects.hashCode(this.adress);
+        hash = 37 * hash + Objects.hashCode(this.accountNumber);
+        hash = 37 * hash + Objects.hashCode(this.phone);
+        return hash;
     }
     
       @Override

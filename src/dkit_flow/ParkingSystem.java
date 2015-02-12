@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 /**
- *
+ * The controlling class of the automated parking system
  * @author Kris
  */
 public class ParkingSystem implements Parkable {
@@ -32,6 +32,9 @@ public class ParkingSystem implements Parkable {
     private User user;                          // this object will store information of each car entering parking
     private final iDataBase dataBase;                        // reference to database
 
+    /**
+     *
+     */
     public ParkingSystem() {
         panels = new ArrayList<>();
         gates = new ArrayList<>();
@@ -40,17 +43,29 @@ public class ParkingSystem implements Parkable {
         dataBase = new parkingDB();                      // dataBase object invoked in the constructor of ParkingSystem object
     }
 
+    /**
+     *
+     * @param p
+     */
     @Override
     public void registerDisplayPanel(Displayable p) {
         panels.add(p);
 
     }
 
+    /**
+     *
+     * @param p
+     */
     @Override
     public void removeDisplayPanel(Displayable p) {
         panels.remove(p);
     }
 
+    /**
+     *
+     * @param freeSpace
+     */
     @Override
     public void updateDisplayable(int freeSpace) {
         for (Displayable panel : panels) {
@@ -58,16 +73,28 @@ public class ParkingSystem implements Parkable {
         }
     }
 
+    /**
+     *
+     * @param g
+     */
     @Override
     public void registerGate(Gate g) {
         gates.add(g);
     }
 
+    /**
+     *
+     * @param g
+     */
     @Override
     public void removeGate(Gate g) {
         gates.remove(g);
     }
 
+    /**
+     *
+     * @param sensor
+     */
     @Override
     public void registerCamera(iSensor sensor) {
         if (sensor instanceof EntryCamera) {
@@ -78,6 +105,10 @@ public class ParkingSystem implements Parkable {
         }
     }
 
+    /**
+     *
+     * @param sensor
+     */
     @Override
     public void removeCamera(iSensor sensor) {
         if (sensor instanceof EntryCamera) {
@@ -91,13 +122,16 @@ public class ParkingSystem implements Parkable {
     /*
      Camera object holds car ID, this value is than passed on to the User constructor
      */
+    /**
+     * initiates set of events related to the vehicle entry 
+     * @param camera - object of EntryCamera 
+     */
     public void setCarID(EntryCamera camera) {
 
-        User user = new User(camera.getCarID());
-        // check if subscribed than assign hasPaid boolean = true
-        if (this.getDataBase().isSubscriber(user)) {
+        user = new User(camera.getCarID());
+        if (this.getDataBase().isSubscriber(user)) {                            // checks if subscribed 
              System.out.println(camera.getCarID() + " is subscriber");
-        } else {
+        } else {                                                                // if not subscribed displays warning message
            System.out.println("This is paid parking if you don't want to use it leave within 30min");
         }
         System.out.println("User entering the parking " + user);
@@ -107,17 +141,20 @@ public class ParkingSystem implements Parkable {
         setFreeSpaces(-1);
 
     }
-
-    public void setCarID(ExitCamera c) {
+    /**
+     * initiates set of events related to the vehicle exit
+     * @param camera - object of ExitCamera 
+     */
+    public void setCarID(ExitCamera camera) {
 
         DateFormat dateFormat = new SimpleDateFormat("yyyy:MM:dd HH:mm:ss");
         Calendar cal = Calendar.getInstance();
         String currentDate = dateFormat.format(cal.getTime());
 
-        User user = new User(c.getCarID());
+        user = new User(camera.getCarID());
         //find the right user object in the array list 
         for (int i = 0; i < parkingDB.getTraffic().size(); i++) {
-            if (parkingDB.getTraffic().get(i).getCarID().equals(c.getCarID())) {
+            if (parkingDB.getTraffic().get(i).getCarID().equals(camera.getCarID())) {
                 // set the timeOut = time of leaving
                 parkingDB.getTraffic().get(i).setTimeOut(currentDate);
                 user = parkingDB.getTraffic().get(i);
@@ -158,7 +195,10 @@ public class ParkingSystem implements Parkable {
             }
         
     }
-
+    /**
+     * writes the information from traffic table to the file the name of the file is the current date+time+.txt
+     * @throws IOException 
+     */
     public void backUpTraffic() throws IOException {
         
         ArrayList traffic = parkingDB.getBackUpTraffic();
@@ -183,10 +223,13 @@ public class ParkingSystem implements Parkable {
 
         } catch (FileNotFoundException e) {
             System.out.println("There is a problem writing to a file");
-            e.printStackTrace();
         }
     }
 
+    /**
+     *
+     * @param a
+     */
     public void setFreeSpaces(int a) {
         freeSpace += a;
 
@@ -194,22 +237,35 @@ public class ParkingSystem implements Parkable {
 
     }
 
+    /**
+     *
+     * @return
+     */
     public int getFreeSpaces() {
         return freeSpace;
     }
 
+    /**
+     *
+     * @param u
+     * @return
+     */
     public boolean verifySubscriber(User u) {
         boolean subscriber = false;
         // querry DB if subscribed
         return subscriber;
     }
 
+    /**
+     *
+     * @param g
+     */
     public void openGate(Gate g) {
         g.open();
     }
 
     /**
-     * @return the dataBase
+     * @return the dataBase object
      */
     public iDataBase getDataBase() {
         return dataBase;

@@ -16,11 +16,10 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 /**
- *
- * @author Kris
+ * parkingDB takes care of connection to the database and queries
+ * 
  */
 public class parkingDB implements iDataBase{
 
@@ -30,14 +29,14 @@ public class parkingDB implements iDataBase{
     private static ArrayList<User> traffic = new ArrayList<>();                          // we can store here all info from the table traffic
 
     /**
-     * @return the subscribers
+     * @return the list of subscribers
      */
     public static ArrayList<Subscriber> getSubscribers() {
         return subscribers;
     }
 
     /**
-     * @return the traffic
+     * @return the list of users
      */
     public static ArrayList<User> getTraffic() {
         return traffic;
@@ -59,6 +58,9 @@ public class parkingDB implements iDataBase{
     private static String password;
     private static Connection conn;
 
+    /**
+     *
+     */
     public parkingDB() {
 
         // these variables are neccessary to connect to the database
@@ -81,6 +83,10 @@ public class parkingDB implements iDataBase{
      this method establishes connection with the database
      */
 
+    /**
+     *
+     */
+    
     @Override
     public void connect() {
         try {
@@ -97,6 +103,11 @@ public class parkingDB implements iDataBase{
     /*
      method disconnecting from the database 
      */
+
+    /**
+     *
+     */
+    
     @Override
     public void disconnect() {
         try {
@@ -108,7 +119,10 @@ public class parkingDB implements iDataBase{
             System.out.println("There is a problem disconnecting from the database");
         }
     }
-// register subscriber with the database
+/**
+ * register subscriber in the database
+ * @param s - subscriber 
+ */
     @Override
     public void registerSubscriber(Subscriber s) {
 
@@ -148,8 +162,11 @@ public class parkingDB implements iDataBase{
         }
          
     }
-    // this method queries the data base if there is such a car registration number in the subscriber table
-    // if there is return true
+    /** 
+     * sends query to the database to confirm if the user is present is subscribers table
+     * @param u - user
+     * @return true or false
+    **/
     @Override
     public boolean isSubscriber(User u) {
         boolean isSubscriber = false;
@@ -173,7 +190,11 @@ public class parkingDB implements iDataBase{
         }
         return isSubscriber;
     }
-// delete the subscriber from the subscriber table
+/**
+ * removes subscriber from the Subscribers table
+ * @param s - subscriber
+ */
+    
     @Override
     public void removeSubscriber(Subscriber s) {
         
@@ -195,10 +216,14 @@ public class parkingDB implements iDataBase{
 
         } catch (SQLException e) {
             System.out.println("There is a problem with isSubscriber querry");
-            e.printStackTrace();
         }
     }
 
+    /**
+     * returns current balance of the user passed to the method as an argument 
+     * @param u - user
+     * @return 
+     */
     @Override
     public double getBalance(User u) {
         double balance = 0;
@@ -224,13 +249,17 @@ public class parkingDB implements iDataBase{
         return balance;
     }
 
+    /**
+     * updates the balance of the user in the User table
+     * @param u - user 
+     */
     @Override
     public void updateBalance(User u) {
         // get user balance
         // search for that user in the traffic list
-        for (int i = 0; i < traffic.size(); i++) {
-            if (traffic.get(i).getCarID().equals(u.getCarID())) {
-                u = traffic.get(i);
+        for (User traffic1 : traffic) {
+            if (traffic1.getCarID().equals(u.getCarID())) {
+                u = traffic1;
                 u.setHasPaid(1);
                 System.out.println("Seting hasPaid to 1 in updateBalance (user)");
                 break;
@@ -250,10 +279,15 @@ public class parkingDB implements iDataBase{
             System.out.println("Paid for " + u.getCarID());
         } catch (SQLException e) {
             System.out.println("There is a problem with balance update querry");
-            e.printStackTrace();
         }
     }
 
+    /**
+     * updates the balance of the subscriber in the Subscriber table by the amount=charge
+     * @param s - subscriber
+     * @param charge - amount of charge 
+     * @return 
+     */
     @Override
     public double updateBalance(Subscriber s, double charge) {
 
@@ -281,7 +315,6 @@ public class parkingDB implements iDataBase{
             System.out.println("Paid for " + s.getCarID());
         } catch (SQLException e) {
             System.out.println("There is a problem with balance update traffic query");
-            e.printStackTrace();
         }
         try{
         String sql = "UPDATE subscribers set balance = '" + balance + "' Where CarID = '" + s.getCarID() + "'";
@@ -289,13 +322,16 @@ public class parkingDB implements iDataBase{
         System.out.println("Executing update balance in subscribers");
         }catch(SQLException e){
             System.out.println("There is a problem with balance update subscribers query");
-            e.printStackTrace();
         }
         s.setTimeIn(null);
         s.setTimeOut(null);
         return balance;
     }
 
+    /**
+     * inserts new record in the traffic table
+     * @param u - user 
+     */
     @Override
     public void insertTraffic(User u) {
 
@@ -322,11 +358,14 @@ public class parkingDB implements iDataBase{
 
         } catch (SQLException e) {
             System.out.println("There is a problem with querry insert into traffic");
-            e.printStackTrace();
             e.toString();
         }
     }
 
+    /**
+     * updates the record for the given user in the traffic table to reflect the vehicle leaving the parking lot
+     * @param u - user 
+     */
     @Override
     public void exitTraffic(User u) {
         System.out.println("exitVehicle method in parkingDB: " + u.getCarID());
@@ -350,11 +389,15 @@ public class parkingDB implements iDataBase{
 
         } catch (SQLException e) {
             System.out.println("There is a problem with balance update querry");
-            e.printStackTrace();
         }
 
     }
 
+    /**
+     * calculates the charge based on the amount of time the vehicle spent at the parking lot
+     * @param u - user
+     * @return charge
+     */
     @Override
     public double calculateCharge(User u) {
 
@@ -365,7 +408,7 @@ public class parkingDB implements iDataBase{
         String currentDate = dateFormat.format(cal.getTime());
         Date d1;
         Date d2;
-        double diff = 0.0;
+        double diff;
         
             double diffSeconds = 0;
             double diffMinutes= 0;
@@ -411,7 +454,9 @@ public class parkingDB implements iDataBase{
         
         return charge;
     }
-
+/**
+ * initialises traffic arrayList with the info from traffic table in the database  
+ */
     public static void initTraffic() {
         try {
             String query = "SELECT CarID, DateIn, DateOut, balance, hasPaid FROM traffic WHERE hasPaid = 0";
@@ -430,10 +475,12 @@ public class parkingDB implements iDataBase{
 
         } catch (SQLException e) {
             System.out.println("There is a problem with getting traffic list");
-            e.printStackTrace();
         }
     }
-    
+    /**
+     * returns arrayList containing records of the vehicles which used the parking lot
+     * @return ArrayList
+     */
      public static ArrayList getBackUpTraffic() {
          ArrayList<User>t = new ArrayList<>();
         try {
@@ -453,10 +500,12 @@ public class parkingDB implements iDataBase{
 
         } catch (SQLException e) {
             System.out.println("There is a problem with getting traffic list");
-            e.printStackTrace();
         }
         return t;
     }
+     /**
+      * initialises arrayList subscribers with records contained in the Subscribers table
+      */
   public static void initSubscribers(){
       try{
            String query = "SELECT ID, FirstName, LastName, carID, accountNumber, balance FROM subscribers";
@@ -478,7 +527,6 @@ public class parkingDB implements iDataBase{
 
         } catch (SQLException e) {
             System.out.println("There is a problem with getting traffic list");
-            e.printStackTrace();
       }
   }
     

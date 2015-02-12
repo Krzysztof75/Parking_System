@@ -6,8 +6,8 @@
 package dkit_flow;
 
 /**
+ * abstract class implements iSensor
  * 
- * @author Kris
  */
 public abstract class Camera implements iSensor{
     
@@ -15,21 +15,36 @@ public abstract class Camera implements iSensor{
                                                   //the Camera object will pass itself as argument to the ParkingSystem method setCarID
     ParkingSystem parkingSystem;                  // pointer to the ParkingSystem Object so that the object camera can register with it
     
+    /**
+     *
+     * @param carID
+     */
     @Override
-    public void read(String carID){           // read method taking String as an argument
+    /**
+     * reads String representing registration number and passes it to the ParkingSystem object
+     * @param: String
+     */
+    public void read(String carID){           
         this.setCarID(carID);                 // assign carID value read by camera to the carID instatnce variable
         this.send(carID);                     // look for the implementation of send method in Entry and Exit cameras  
     }
-    
-    public void read(String [] reg){           // read method taking String array as an argument it loops than through the array and invoke send() 
-                                               // method on each String value
-         for(int i = 0; i < reg.length; i++){
-             setCarID(reg[i]);
-             System.out.println("invoking read method from abstract Camera class");
-             this.send(getCarID());
+    /**
+     * reads array of Strings
+     * @param reg 
+     */
+    public void read(String [] reg){           // read method taking String array as an argument it loops than through the array and invoke send()
+        // method on each String value
+        for (String reg1 : reg) {
+            setCarID(reg1);
+            System.out.println("invoking read method from abstract Camera class");
+            this.send(getCarID());
         }  
     }
   
+    /**
+     *
+     * @param carID
+     */
     @Override
     public abstract void send(String carID);                      
 

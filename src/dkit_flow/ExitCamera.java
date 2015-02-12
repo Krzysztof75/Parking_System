@@ -6,27 +6,27 @@
 package dkit_flow;
 
 /**
- *
- * @author Kris
+ * reads registration plates of vehicles leaving the parking lot
  */
-/* class representing camera type reader
-   with two read methods:
-- read(String); reads String as an input
--read(String Array) reads String elements in the array
-*/
 public class ExitCamera extends Camera{    
     
  /* parkingSystem is a reference to Parking System object, it is inherited from camera class
  *  it is used to send carID to parkingSystem object   
  */ 
     
-    // constructor 
+    /**
+     * 
+     * @param dkit - reference to the ParkingSystem object
+     */
     public ExitCamera(ParkingSystem dkit){
         this.parkingSystem = dkit;                 
     }
     
+    /**
+     * passes carID to the ParkingSystem object
+     * @param carID - string representing registration plate
+     */
     @Override
-     // passing CarID to the ParkingSystem object
     public void send(String carID){  
         System.out.println("Send carID from exit camera " + carID);
         parkingSystem.setCarID(this);

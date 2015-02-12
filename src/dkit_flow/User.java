@@ -10,13 +10,12 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 /**
- *
+ * Object of class User holds the basic information of the parking lot users
  * @author Kris
  */
-/* this object lets us operate all the data about the Users of the parking system
 
+//this object lets us operate all the data about the Users of the parking system
 
-*/
 public class User {
     private String carID;                 // car ID and balance are the only think we need from the user
     private double balance;
@@ -27,30 +26,49 @@ public class User {
        Calendar cal = Calendar.getInstance();
        String currentDate = dateFormat.format(cal.getTime());
 
-    
+    /**
+     * parameterless constructor
+     */
     public User(){
         carID = null;
         balance = 0;
         hasPaid = 0;
     }
-    
+    /**
+     * @param carID - String value representing car registration
+     */
     public User(String carID){
          this();
          this.carID = carID;
          timeIn = currentDate;
     }
-    
+    /**
+     * @param carID
+     * @param timeIN 
+     */
     public User(String carID, String timeIN){
          this(carID);
          this.carID = carID;
          this.timeIn = timeIN;
     }
+    /**
+     * @param carID
+     * @param timeIN
+     * @param TimeOut
+     * @param balance
+     * @param hasPaid 
+     */
     public User(String carID,String timeIN, String TimeOut, double balance, int hasPaid){
         this(carID,timeIN);
         this.timeOut = TimeOut;
         this.balance = balance;
         this.hasPaid = hasPaid;
     }
+
+    /**
+     *
+     * @return
+     */
     public int getHasPaid(){
         return hasPaid;
     }
@@ -126,10 +144,6 @@ public class User {
     public void setTimeOut(String timeOUT) {
         this.timeOut = timeOUT;
     }
-
-    /**
-     * @return the hasPaid
-     */
 
     /**
      * @param hasPaid the hasPaid to set

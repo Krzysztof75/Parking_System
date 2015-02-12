@@ -30,6 +30,10 @@ public class Dkit_flowTest {
     static String [] outgoingTraffic2 = new String[]{"11DD212","12HG125","02BA156","01JI527","04LK298"};
     static String [] outgoingTraffic3 = new String[]{"LKP46789","05JY667","00KK555","01HF444"};
     
+    /**
+     *
+     * @param args
+     */
     public static void main(String[] args) {
         // TODO code application logic here
   
@@ -79,7 +83,7 @@ public class Dkit_flowTest {
         parkingSystem.getDataBase().registerSubscriber(sub6);
         parkingSystem.getDataBase().registerSubscriber(sub7);        
 //        
-//       //  vehicles enters the parking
+       //  vehicles enter the parking
         
         camEntry.read(incomingTrafficEntry1);
         System.out.println();
@@ -89,9 +93,11 @@ public class Dkit_flowTest {
         System.out.println();
         
 //        remove subscriber
-        parkingSystem.getDataBase().removeSubscriber(sub3);
+        
+//        parkingSystem.getDataBase().removeSubscriber(sub3);
 
         // vehicles exiting the traffic
+        
         camExit.read(outgoingTraffic1);
         System.out.println();
       
@@ -100,6 +106,8 @@ public class Dkit_flowTest {
        
         camExit.read(outgoingTraffic3);
         System.out.println();
+
+// first 30 min free of charge wait at least this much to see the charge being calculated        
         
 //    Paying for the user if not subscriber      
 //      User car = new User("12HA254");
@@ -116,6 +124,7 @@ public class Dkit_flowTest {
 //        System.out.println(charge);
 //        parkingDB.updateBalance(car);
 
+// run it to exit single vehicle (make sure the vehicle is still at the parking lot
         
 //      Single vehicle leaves the parking       
 //          camExit.read("11DP214");
@@ -123,15 +132,16 @@ public class Dkit_flowTest {
 //     printing out the users from the traffic arraylist
         
 //        for(User u : parkingDB.getTraffic())
-//            System.out.println(u);
-        
+//            System.out.println(u);       
 //        System.out.println();
+ 
+// run this piece of code to write the content of the traffic table to the file
         
-        try{   
-            parkingSystem.backUpTraffic();
-        } catch (IOException ex) {
-            Logger.getLogger(Dkit_flowTest.class.getName()).log(Level.SEVERE, null, ex);
-        }
+//        try{   
+//            parkingSystem.backUpTraffic();
+//        } catch (IOException ex) {
+//            Logger.getLogger(Dkit_flowTest.class.getName()).log(Level.SEVERE, null, ex);
+//        }
         
         parkingSystem.getDataBase().disconnect();
        

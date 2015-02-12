@@ -12,7 +12,21 @@ package dkit_flow;
  * on all panels registered with parkingSystem object at the same time
  */
 public interface Displayable {
-   public void display(); 
-   public void displayMessage(String message);
-   public void update(int freeSpace);
+ 
+    /**
+     *
+     */
+    public void display(); 
+
+    /**
+     *
+     * @param message
+     */
+    public void displayMessage(String message);
+
+    /**
+     *
+     * @param freeSpace
+     */
+    public void update(int freeSpace);
 }

@@ -6,10 +6,19 @@
 package dkit_flow;
 
 /**
- *
  * @author Kris
  */
 public interface iSensor {
-     public void read(String carID);
-     public void send(String carID);
+
+    /**
+     *
+     * @param carID
+     */
+    public void read(String carID);
+
+    /**
+     *
+     * @param carID
+     */
+    public void send(String carID);
 }

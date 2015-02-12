@@ -6,8 +6,8 @@
 package dkit_flow;
 
 /**
- *
- * @author Kris
+ * displays the current number of free spaces at the parking lot 
+ * and messages passed to it
  */
 public class DisplayPanel implements Displayable {
     
@@ -15,31 +15,55 @@ public class DisplayPanel implements Displayable {
     private static int freeSpace;           // the number of the freeSpaces at the parking lot
     private String panelID;                 // the identification number of the display will be stored here we can include a List of panels over here
     
+    /**
+     *
+     * @param parkingSystem
+     */
     public DisplayPanel(ParkingSystem parkingSystem){
         this.parkingSystem = parkingSystem;
     }   
-    
-//  this method update the count of free spaces and than call display() so that new value is displayed
+     
+    /**
+     * this method update the count of free spaces and than call display() so that new value is displayed
+     * @param freeSpace 
+     */
     @Override
     public void update(int freeSpace){
         freeSpace = parkingSystem.getFreeSpaces();
         DisplayPanel.freeSpace = freeSpace;
         display();
     }
+
+    /**
+     * displays free space count
+     */
     @Override
-    // displays count of free spaces
     public void display(){
         System.out.println(panelID + "Free space: " + freeSpace);
     }
+
+    /**
+     * displays message passed to it as an argument
+     * @param message - string
+     */
     @Override
-    // displays massage which is passed to it as argument
     public void displayMessage(String message){
         System.out.println(message);
         
     }
+
+    /**
+     *
+     * @return
+     */
     public String getPanelID(){
         return panelID;
     }
+
+    /**
+     *
+     * @param id
+     */
     public void setPanelID(String id){
         panelID = id;
     }
