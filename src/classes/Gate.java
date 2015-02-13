@@ -3,7 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package dkit_flow;
+package classes;
+
+import autParkSys.interfaces.Parkable;
 
 /**
  * object of this class represent a simple gate mechanism which lifts up when the signal is sent and than lowers itself down 

@@ -3,8 +3,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package dkit_flow;
+package autParSys.main;
 
+import classes.DisplayPanel;
+import classes.EntryCamera;
+import classes.ExitCamera;
+import classes.Gate;
+import classes.ParkingSystem;
+import classes.Subscriber;
+import classes.User;
+import classes.parkingDB;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -68,29 +76,29 @@ public class Dkit_flowTest {
         
       //  Registering Subscriber
         
-        Subscriber sub1 = new Subscriber("Krzysztof", "Gilewski","04LK298","090786876567", 0.0);
-        Subscriber sub2 = new Subscriber("Hardik", "Thakkar","11DP214","8764563564554", 0.0);
-        Subscriber sub3 = new Subscriber("Dean", "McMahon", "12HG125","862542545426882", 0.0);
-        Subscriber sub4 = new Subscriber("Gerry", "McGrane", "01JI527", "625645158451819", 0.0);
-        Subscriber sub5 = new Subscriber("Tony", "McMarron", "LKP46789", "787575576567675", 0.0);
-        Subscriber sub6 = new Subscriber("Jimmy", "NcNally", "01HF444","58585586585668586", 0.0);
-        Subscriber sub7 = new Subscriber("Robert", "DeNiro", "02YL456", "7867568758548585", 0.0);
-        parkingSystem.getDataBase().registerSubscriber(sub1);
-        parkingSystem.getDataBase().registerSubscriber(sub2);
-        parkingSystem.getDataBase().registerSubscriber(sub3);
-        parkingSystem.getDataBase().registerSubscriber(sub4);
-        parkingSystem.getDataBase().registerSubscriber(sub5);
-        parkingSystem.getDataBase().registerSubscriber(sub6);
-        parkingSystem.getDataBase().registerSubscriber(sub7);        
-//        
+//        Subscriber sub1 = new Subscriber("Krzysztof", "Gilewski","04LK298","090786876567", 0.0);
+//        Subscriber sub2 = new Subscriber("Hardik", "Thakkar","11DP214","8764563564554", 0.0);
+//        Subscriber sub3 = new Subscriber("Dean", "McMahon", "12HG125","862542545426882", 0.0);
+//        Subscriber sub4 = new Subscriber("Gerry", "McGrane", "01JI527", "625645158451819", 0.0);
+//        Subscriber sub5 = new Subscriber("Tony", "McMarron", "LKP46789", "787575576567675", 0.0);
+//        Subscriber sub6 = new Subscriber("Jimmy", "NcNally", "01HF444","58585586585668586", 0.0);
+//        Subscriber sub7 = new Subscriber("Robert", "DeNiro", "02YL456", "7867568758548585", 0.0);
+//        parkingSystem.getDataBase().registerSubscriber(sub1);
+//        parkingSystem.getDataBase().registerSubscriber(sub2);
+//        parkingSystem.getDataBase().registerSubscriber(sub3);
+//        parkingSystem.getDataBase().registerSubscriber(sub4);
+//        parkingSystem.getDataBase().registerSubscriber(sub5);
+//        parkingSystem.getDataBase().registerSubscriber(sub6);
+//        parkingSystem.getDataBase().registerSubscriber(sub7);        
+        
        //  vehicles enter the parking
         
-        camEntry.read(incomingTrafficEntry1);
-        System.out.println();
-          camEntry.read(incomingTrafficEntry2);
-        System.out.println();
-        camEntry.read(incomingTrafficEntry3);
-        System.out.println();
+//        camEntry.read(incomingTrafficEntry1);
+//        System.out.println();
+//          camEntry.read(incomingTrafficEntry2);
+//        System.out.println();
+//        camEntry.read(incomingTrafficEntry3);
+//        System.out.println();
         
 //        remove subscriber
         
@@ -98,19 +106,19 @@ public class Dkit_flowTest {
 
         // vehicles exiting the traffic
         
-        camExit.read(outgoingTraffic1);
-        System.out.println();
-      
-        camExit.read(outgoingTraffic2);
-        System.out.println();
+//        camExit.read(outgoingTraffic1);
+//        System.out.println();
+//      
+//        camExit.read(outgoingTraffic2);
+//        System.out.println(); camExit.read(outgoingTraffic2);
        
-        camExit.read(outgoingTraffic3);
-        System.out.println();
+//        camExit.read(outgoingTraffic3);
+//        System.out.println();
 
 // first 30 min free of charge wait at least this much to see the charge being calculated        
         
 //    Paying for the user if not subscriber      
-//      User car = new User("12HA254");
+//      User car = new User("11DD212");
             
 //     find the rigt user in the arraylist tarffic       
 //        for(int i = 0; i < parkingDB.getTraffic().size(); i++){
@@ -119,15 +127,15 @@ public class Dkit_flowTest {
 //            System.out.println("Car: " + car);
 //        }
 //        }
-//        double charge = parkingDB.calculateCharge(car);
+//        double charge = parkingSystem.getDataBase().calculateCharge(car);
 //        car.setBalance(charge);
 //        System.out.println(charge);
-//        parkingDB.updateBalance(car);
+//        parkingSystem.getDataBase().updateBalance(car);
 
 // run it to exit single vehicle (make sure the vehicle is still at the parking lot
         
 //      Single vehicle leaves the parking       
-//          camExit.read("11DP214");
+//          camExit.read("11DD212");
             
 //     printing out the users from the traffic arraylist
         

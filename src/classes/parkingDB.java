@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package dkit_flow;
+package classes;
 
+import autParkSys.interfaces.iDataBase;
 import java.sql.*;
 import java.util.ArrayList;
 import java.sql.Connection;
@@ -29,14 +30,14 @@ public class parkingDB implements iDataBase{
     private static ArrayList<User> traffic = new ArrayList<>();                          // we can store here all info from the table traffic
 
     /**
-     * @return the list of subscribers
+     * @return 
      */
     public static ArrayList<Subscriber> getSubscribers() {
         return subscribers;
     }
 
     /**
-     * @return the list of users
+     * @return
      */
     public static ArrayList<User> getTraffic() {
         return traffic;
@@ -79,14 +80,10 @@ public class parkingDB implements iDataBase{
     // Exceptions - objects created when problems, which JRE can't resolve happen while running programs 
     // Exception handling lets developers handle such a problems in gracefull manner 
     
-    /*
-     this method establishes connection with the database
-     */
-
     /**
-     *
-     */
-    
+     *this method establishes connection with the database
+     **/
+
     @Override
     public void connect() {
         try {
@@ -100,12 +97,9 @@ public class parkingDB implements iDataBase{
             System.out.println("There is a problem connecting to the database");
         }
     }
-    /*
-     method disconnecting from the database 
-     */
 
     /**
-     *
+     *method disconnecting from the database 
      */
     
     @Override
@@ -121,7 +115,7 @@ public class parkingDB implements iDataBase{
     }
 /**
  * register subscriber in the database
- * @param s - subscriber 
+ * @param s
  */
     @Override
     public void registerSubscriber(Subscriber s) {
@@ -164,8 +158,8 @@ public class parkingDB implements iDataBase{
     }
     /** 
      * sends query to the database to confirm if the user is present is subscribers table
-     * @param u - user
-     * @return true or false
+     * @param u
+     * @return
     **/
     @Override
     public boolean isSubscriber(User u) {
@@ -192,7 +186,7 @@ public class parkingDB implements iDataBase{
     }
 /**
  * removes subscriber from the Subscribers table
- * @param s - subscriber
+ * @param s 
  */
     
     @Override
@@ -221,7 +215,7 @@ public class parkingDB implements iDataBase{
 
     /**
      * returns current balance of the user passed to the method as an argument 
-     * @param u - user
+     * @param u
      * @return 
      */
     @Override
@@ -251,7 +245,7 @@ public class parkingDB implements iDataBase{
 
     /**
      * updates the balance of the user in the User table
-     * @param u - user 
+     * @param u 
      */
     @Override
     public void updateBalance(User u) {
@@ -284,8 +278,8 @@ public class parkingDB implements iDataBase{
 
     /**
      * updates the balance of the subscriber in the Subscriber table by the amount=charge
-     * @param s - subscriber
-     * @param charge - amount of charge 
+     * @param s 
+     * @param charge
      * @return 
      */
     @Override
@@ -330,7 +324,7 @@ public class parkingDB implements iDataBase{
 
     /**
      * inserts new record in the traffic table
-     * @param u - user 
+     * @param u 
      */
     @Override
     public void insertTraffic(User u) {
@@ -364,7 +358,7 @@ public class parkingDB implements iDataBase{
 
     /**
      * updates the record for the given user in the traffic table to reflect the vehicle leaving the parking lot
-     * @param u - user 
+     * @param u 
      */
     @Override
     public void exitTraffic(User u) {
@@ -395,8 +389,8 @@ public class parkingDB implements iDataBase{
 
     /**
      * calculates the charge based on the amount of time the vehicle spent at the parking lot
-     * @param u - user
-     * @return charge
+     * @param u
+     * @return
      */
     @Override
     public double calculateCharge(User u) {
@@ -479,7 +473,7 @@ public class parkingDB implements iDataBase{
     }
     /**
      * returns arrayList containing records of the vehicles which used the parking lot
-     * @return ArrayList
+     * @return 
      */
      public static ArrayList getBackUpTraffic() {
          ArrayList<User>t = new ArrayList<>();
@@ -531,21 +525,21 @@ public class parkingDB implements iDataBase{
   }
     
     /**
-     * @return the url
+     * @return
      */
     public String getUrl() {
         return url;
     }
 
     /**
-     * @param url the url to set
+     * @param url
      */
     public void setUrl(String url) {
         parkingDB.url = url;
     }
 
     /**
-     * @return the dbName
+     * @return
      */
     public String getDbName() {
         return dbName;

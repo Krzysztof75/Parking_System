@@ -3,7 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package dkit_flow;
+package classes;
+
+import autParkSys.interfaces.iSensor;
 
 /**
  * abstract class implements iSensor
@@ -49,14 +51,14 @@ public abstract class Camera implements iSensor{
     public abstract void send(String carID);                      
 
     /**
-     * @return the carID
+     * @return
      */
     public String getCarID() {
         return carID;
     }
 
     /**
-     * @param carID the carID to set
+     * @param carID
      */
     public void setCarID(String carID) {
         this.carID = carID;

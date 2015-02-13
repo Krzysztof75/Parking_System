@@ -3,11 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package dkit_flow;
+package classes;
 
+import autParkSys.interfaces.iSensor;
+import autParkSys.interfaces.iDataBase;
+import autParkSys.interfaces.Parkable;
+import autParkSys.interfaces.Displayable;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.DateFormat;
@@ -29,7 +32,7 @@ public class ParkingSystem implements Parkable {
     private final ArrayList<iSensor> entryCameras;     // array holding references to the EntryCameras
     private final ArrayList<iSensor> exitCameras;       // array holding references to the ExitCameras
     private static int freeSpace = 928;         // number of ramaining free spaces static means variable is shared among other objects
-    private User user;                          // this object will store information of each car entering parking
+    //private User user;                          // this object will store information of each car entering parking
     private final iDataBase dataBase;                        // reference to database
 
     /**
@@ -68,9 +71,9 @@ public class ParkingSystem implements Parkable {
      */
     @Override
     public void updateDisplayable(int freeSpace) {
-        for (Displayable panel : panels) {
+        panels.stream().forEach((panel) -> {
             panel.update(freeSpace);
-        }
+        });
     }
 
     /**
@@ -128,7 +131,7 @@ public class ParkingSystem implements Parkable {
      */
     public void setCarID(EntryCamera camera) {
 
-        user = new User(camera.getCarID());
+        User user = new User(camera.getCarID());
         if (this.getDataBase().isSubscriber(user)) {                            // checks if subscribed 
              System.out.println(camera.getCarID() + " is subscriber");
         } else {                                                                // if not subscribed displays warning message
@@ -151,7 +154,7 @@ public class ParkingSystem implements Parkable {
         Calendar cal = Calendar.getInstance();
         String currentDate = dateFormat.format(cal.getTime());
 
-        user = new User(camera.getCarID());
+        User user = new User(camera.getCarID());
         //find the right user object in the array list 
         for (int i = 0; i < parkingDB.getTraffic().size(); i++) {
             if (parkingDB.getTraffic().get(i).getCarID().equals(camera.getCarID())) {

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package dkit_flow;
+package classes;
 
 import java.util.Objects;
 
@@ -29,7 +29,7 @@ public final class Subscriber extends User {
     }
     /**
      * 
-     * @param u - user 
+     * @param u 
      */
     public Subscriber(User u){
         super(u.getCarID());
@@ -89,70 +89,70 @@ public final class Subscriber extends User {
     }
     
     /**
-     * @return the FirstName
+     * @return 
      */
     public String getFirstName() {
         return FirstName;
     }
 
     /**
-     * @param FirstName the FirstName to set
+     * @param FirstName
      */
     public void setFirstName(String FirstName) {
         this.FirstName = FirstName;
     }
 
     /**
-     * @return the LastName
+     * @return
      */
     public String getLastName() {
         return LastName;
     }
 
     /**
-     * @param LastName the LastName to set
+     * @param LastName
      */
     public void setLastName(String LastName) {
         this.LastName = LastName;
     }
 
     /**
-     * @return the AccountNumber
+     * @return
      */
     public String getAccountNumber() {
         return accountNumber;
     }
 
     /**
-     * @param AccountNumber the AccountNumber to set
+     * @param AccountNumber
      */
     public void setAccountNumber(String AccountNumber) {
         this.accountNumber = AccountNumber;
     }
 
     /**
-     * @return the adress
+     * @return
      */
     public String getAdress() {
         return adress;
     }
 
     /**
-     * @return the account
+     * @return
      */
     public String getAccount() {
         return accountNumber;
     }
 
     /**
-     * @param account the account to set
+     * @param account
      */
     public void setAccount(String account) {
         this.accountNumber = account;
     }
 
     /**
-     * @return the phone
+     * @return
      */
     public String getPhone() {
         return phone;

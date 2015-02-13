@@ -3,7 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package dkit_flow;
+package classes;
+
+import autParkSys.interfaces.Displayable;
 
 /**
  * displays the current number of free spaces at the parking lot 
