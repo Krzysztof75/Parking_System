@@ -6,6 +6,7 @@
 package classes;
 
 import autParkSys.interfaces.iDataBase;
+import java.io.Serializable;
 import java.sql.*;
 import java.util.ArrayList;
 import java.sql.Connection;
@@ -22,12 +23,17 @@ import java.util.Date;
  * parkingDB takes care of connection to the database and queries
  * 
  */
-public class parkingDB implements iDataBase{
+public class parkingDB implements iDataBase, Serializable{
 
     // this array will hold The most recent information from traffic table
     // this array will hold the most recent information from subscriber table
     private static ArrayList<Subscriber> subscribers = new ArrayList<>();
     private static ArrayList<User> traffic = new ArrayList<>();                          // we can store here all info from the table traffic
+    private static volatile parkingDB instance = new parkingDB();
+    
+    public static parkingDB getInstance(){
+        return instance;
+    }
 
     /**
      * @return 

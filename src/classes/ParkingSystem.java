@@ -13,6 +13,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -22,8 +23,11 @@ import java.util.Calendar;
  * The controlling class of the automated parking system
  * @author Kris
  */
-public class ParkingSystem implements Parkable {
 
+
+public class ParkingSystem implements Parkable, Serializable {
+
+   
     /* when registering objects such as cameras, gates, displayPanels
      the references to these objects are stored in the arrays specified below
      */
@@ -35,20 +39,24 @@ public class ParkingSystem implements Parkable {
     //private User user;                          // this object will store information of each car entering parking
     private final iDataBase dataBase;                        // reference to database
 
+     private static volatile ParkingSystem instance = new ParkingSystem();
     /**
      *
      */
-    public ParkingSystem() {
+    private ParkingSystem() {
         panels = new ArrayList<>();
         gates = new ArrayList<>();
         entryCameras = new ArrayList<>();
         exitCameras = new ArrayList<>();
-        dataBase = new parkingDB();                      // dataBase object invoked in the constructor of ParkingSystem object
+        dataBase = parkingDB.getInstance();                      // dataBase object invoked in the constructor of ParkingSystem object
     }
 
+    public static ParkingSystem getInstance(){
+       return instance; 
+    }
     /**
      *
-     * @param p
+     * @param p - object of class implementing Displayable
      */
     @Override
     public void registerDisplayPanel(Displayable p) {

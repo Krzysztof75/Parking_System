@@ -49,7 +49,7 @@ public class Dkit_flowTest {
         Setting up the Parking system
         Forming all the system elements
         */
-        ParkingSystem parkingSystem = new ParkingSystem();
+        ParkingSystem parkingSystem = ParkingSystem.getInstance();
         EntryCamera camEntry = new EntryCamera(parkingSystem);
         ExitCamera camExit = new ExitCamera(parkingSystem);
         
@@ -76,29 +76,29 @@ public class Dkit_flowTest {
         
       //  Registering Subscriber
         
-//        Subscriber sub1 = new Subscriber("Krzysztof", "Gilewski","04LK298","090786876567", 0.0);
-//        Subscriber sub2 = new Subscriber("Hardik", "Thakkar","11DP214","8764563564554", 0.0);
-//        Subscriber sub3 = new Subscriber("Dean", "McMahon", "12HG125","862542545426882", 0.0);
-//        Subscriber sub4 = new Subscriber("Gerry", "McGrane", "01JI527", "625645158451819", 0.0);
-//        Subscriber sub5 = new Subscriber("Tony", "McMarron", "LKP46789", "787575576567675", 0.0);
-//        Subscriber sub6 = new Subscriber("Jimmy", "NcNally", "01HF444","58585586585668586", 0.0);
-//        Subscriber sub7 = new Subscriber("Robert", "DeNiro", "02YL456", "7867568758548585", 0.0);
-//        parkingSystem.getDataBase().registerSubscriber(sub1);
-//        parkingSystem.getDataBase().registerSubscriber(sub2);
-//        parkingSystem.getDataBase().registerSubscriber(sub3);
-//        parkingSystem.getDataBase().registerSubscriber(sub4);
-//        parkingSystem.getDataBase().registerSubscriber(sub5);
-//        parkingSystem.getDataBase().registerSubscriber(sub6);
-//        parkingSystem.getDataBase().registerSubscriber(sub7);        
+        Subscriber sub1 = new Subscriber("Krzysztof", "Gilewski","04LK298","090786876567", 0.0);
+        Subscriber sub2 = new Subscriber("Hardik", "Thakkar","11DP214","8764563564554", 0.0);
+        Subscriber sub3 = new Subscriber("Dean", "McMahon", "12HG125","862542545426882", 0.0);
+        Subscriber sub4 = new Subscriber("Gerry", "McGrane", "01JI527", "625645158451819", 0.0);
+        Subscriber sub5 = new Subscriber("Tony", "McMarron", "LKP46789", "787575576567675", 0.0);
+        Subscriber sub6 = new Subscriber("Jimmy", "NcNally", "01HF444","58585586585668586", 0.0);
+        Subscriber sub7 = new Subscriber("Robert", "DeNiro", "02YL456", "7867568758548585", 0.0);
+        parkingSystem.getDataBase().registerSubscriber(sub1);
+        parkingSystem.getDataBase().registerSubscriber(sub2);
+        parkingSystem.getDataBase().registerSubscriber(sub3);
+        parkingSystem.getDataBase().registerSubscriber(sub4);
+        parkingSystem.getDataBase().registerSubscriber(sub5);
+        parkingSystem.getDataBase().registerSubscriber(sub6);
+        parkingSystem.getDataBase().registerSubscriber(sub7);        
         
        //  vehicles enter the parking
         
-//        camEntry.read(incomingTrafficEntry1);
-//        System.out.println();
-//          camEntry.read(incomingTrafficEntry2);
-//        System.out.println();
-//        camEntry.read(incomingTrafficEntry3);
-//        System.out.println();
+        camEntry.read(incomingTrafficEntry1);
+        System.out.println();
+          camEntry.read(incomingTrafficEntry2);
+        System.out.println();
+        camEntry.read(incomingTrafficEntry3);
+        System.out.println();
         
 //        remove subscriber
         
