@@ -29,4 +29,8 @@ public interface Displayable {
      * @param freeSpace
      */
     public void update(int freeSpace);
+
+    public void setPanelID(String display_Panel_nr1_);
+
+    public String getPanelID();
 }

@@ -8,58 +8,62 @@ package classes;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Objects;
 
 /**
  * Object of class User holds the basic information of the parking lot users
+ *
  * @author Kris
  */
-
 //this object lets us operate all the data about the Users of the parking system
-
 public class User {
+
     private String carID;                 // car ID and balance are the only think we need from the user
     private double balance;
     private String timeIn;
     private String timeOut;
     private int hasPaid;
-       DateFormat dateFormat = new SimpleDateFormat("yyyy:MM:dd HH:mm:ss");
-       Calendar cal = Calendar.getInstance();
-       String currentDate = dateFormat.format(cal.getTime());
+    DateFormat dateFormat = new SimpleDateFormat("yyyy:MM:dd HH:mm:ss");
+    Calendar cal = Calendar.getInstance();
+    String currentDate = dateFormat.format(cal.getTime());
 
     /**
      * parameterless constructor
      */
-    public User(){
+    public User() {
         carID = null;
         balance = 0;
         hasPaid = 0;
     }
+
     /**
      * @param carID - String value representing car registration
      */
-    public User(String carID){
-         this();
-         this.carID = carID;
-         timeIn = currentDate;
+    public User(String carID) {
+        this();
+        this.carID = carID;
+        timeIn = currentDate;
     }
+
     /**
      * @param carID
-     * @param timeIN 
+     * @param timeIN
      */
-    public User(String carID, String timeIN){
-         this(carID);
-         this.carID = carID;
-         this.timeIn = timeIN;
+    public User(String carID, String timeIN) {
+        this(carID);
+        this.carID = carID;
+        this.timeIn = timeIN;
     }
+
     /**
      * @param carID
      * @param timeIN
      * @param TimeOut
      * @param balance
-     * @param hasPaid 
+     * @param hasPaid
      */
-    public User(String carID,String timeIN, String TimeOut, double balance, int hasPaid){
-        this(carID,timeIN);
+    public User(String carID, String timeIN, String TimeOut, double balance, int hasPaid) {
+        this(carID, timeIN);
         this.timeOut = TimeOut;
         this.balance = balance;
         this.hasPaid = hasPaid;
@@ -69,9 +73,10 @@ public class User {
      *
      * @return
      */
-    public int getHasPaid(){
+    public int getHasPaid() {
         return hasPaid;
     }
+
     /**
      * @return the carID
      */
@@ -99,9 +104,10 @@ public class User {
     public void setBalance(double balance) {
         this.balance = balance;
     }
+
     @Override
     // Users equal method compares only carID as it is unique for each user
-    public boolean equals(Object o){
+    public boolean equals(Object o) {
         if (o == null) {
             return false;
         }
@@ -111,8 +117,23 @@ public class User {
         User other = (User) o;
         return (other.carID.equals(this.carID));
     }
+
     @Override
-    public String toString(){
+    public int hashCode() {
+        int hash = 3;
+        hash = 59 * hash + Objects.hashCode(this.carID);
+        hash = 59 * hash + (int) (Double.doubleToLongBits(this.balance) ^ (Double.doubleToLongBits(this.balance) >>> 32));
+        hash = 59 * hash + Objects.hashCode(this.timeIn);
+        hash = 59 * hash + Objects.hashCode(this.timeOut);
+        hash = 59 * hash + this.hasPaid;
+        hash = 59 * hash + Objects.hashCode(this.dateFormat);
+        hash = 59 * hash + Objects.hashCode(this.cal);
+        hash = 59 * hash + Objects.hashCode(this.currentDate);
+        return hash;
+    }
+
+    @Override
+    public String toString() {
         // Return description of an object
         return "CarID: " + this.carID + " Time in " + this.timeIn + " Time out: " + this.timeOut + " balance: " + balance + " hasPaid: " + hasPaid;
     }

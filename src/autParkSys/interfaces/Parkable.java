@@ -6,21 +6,18 @@
 package autParkSys.interfaces;
 
 import classes.Gate;
-import autParkSys.interfaces.Displayable;
 
 /**
  *
  * @author Kris
  */
 public interface Parkable {
-    
+
     // this interface sets methods for registering/removing elements
-    
     /**
      *
      * @param d
      */
-        
     public void registerDisplayPanel(Displayable d);
 
     /**
@@ -33,7 +30,7 @@ public interface Parkable {
      *
      * @param freeSpace
      */
-    public void updateDisplayable(int freeSpace); 
+    public void updateDisplayable(int freeSpace);
 
     /**
      *

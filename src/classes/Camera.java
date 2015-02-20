@@ -13,6 +13,7 @@ import autParkSys.interfaces.iSensor;
  */
 public abstract class Camera implements iSensor{
     
+    private String camID;
     private String carID;                         // this variable will be used to pass the carID value inside Camera object 
                                                   //the Camera object will pass itself as argument to the ParkingSystem method setCarID
     ParkingSystem parkingSystem;                  // pointer to the ParkingSystem Object so that the object camera can register with it
@@ -38,7 +39,7 @@ public abstract class Camera implements iSensor{
         // method on each String value
         for (String reg1 : reg) {
             setCarID(reg1);
-            System.out.println("invoking read method from abstract Camera class");
+            ParkingSystem.log.info("invoking read method from abstract Camera class");
             this.send(getCarID());
         }  
     }
@@ -62,6 +63,20 @@ public abstract class Camera implements iSensor{
      */
     public void setCarID(String carID) {
         this.carID = carID;
+    }
+
+    /**
+     * @return the camID
+     */
+    public String getCamID() {
+        return camID;
+    }
+
+    /**
+     * @param camID the camID to set
+     */
+    public void setCamID(String camID) {
+        this.camID = camID;
     }
         
 }

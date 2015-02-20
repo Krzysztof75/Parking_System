@@ -13,7 +13,7 @@ import classes.User;
  * @author Kris
  */
 public interface iDataBase {
-    
+
     /**
      *
      */
@@ -82,6 +82,5 @@ public interface iDataBase {
      * @return
      */
     double calculateCharge(User u);
-    
-    
+
 }

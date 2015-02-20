@@ -9,57 +9,57 @@ import java.util.Objects;
 
 /**
  * instance variables of this class store information about subscribed users
+ *
  * @author Kris
  */
 // Take note that Subscriber inherits String carID and double balance from User
 public final class Subscriber extends User {
+
     private String FirstName;
     private String LastName;
     private String adress;
     private String accountNumber;
     private String phone;
-    
-    //default user spec constructor
 
+    //default user spec constructor
     /**
      *
      */
-        public Subscriber(){
+    public Subscriber() {
         super();
     }
+
     /**
-     * 
-     * @param u 
+     *
+     * @param u
      */
-    public Subscriber(User u){
+    public Subscriber(User u) {
         super(u.getCarID());
     }
-    
-   
+
     /**
-     * 
-     * @param FirstName
-     * @param LastName
+     *
+     * @param firstName
+     * @param lastName
      * @param carID
      * @param account
-     * @param balance 
+     * @param balance
      */
-    public Subscriber(String FirstName, String LastName, String carID, String account, double balance){
+    public Subscriber(String firstName, String lastName, String carID, String account, double balance) {
         // invoking super class User constructor to initiate various instance variables
         super(carID);
-        this.setFirstName(FirstName);
-        this.setLastName(LastName);
+        this.setFirstName(firstName);
+        this.setLastName(lastName);
         this.setCarID(carID);
         this.setAccountNumber(account);
         this.setHasPaid(1);
-     
-          
+
     }
 
-     @Override
+    @Override
     // we specified this equal method in case we need to compare Subscribers
-    public boolean equals(Object o){
-   
+    public boolean equals(Object o) {
+
         if (o == null) {
             return false;
         }
@@ -81,15 +81,15 @@ public final class Subscriber extends User {
         hash = 37 * hash + Objects.hashCode(this.phone);
         return hash;
     }
-    
-      @Override
-    public String toString(){
-        
-        return super.toString() + " First Name: " + this.FirstName + " Last Name: " + this.LastName;
+
+    @Override
+    public String toString() {
+
+        return "First Name: " + this.FirstName + " Last Name: " + this.LastName;
     }
-    
+
     /**
-     * @return 
+     * @return
      */
     public String getFirstName() {
         return FirstName;
@@ -157,5 +157,5 @@ public final class Subscriber extends User {
     public String getPhone() {
         return phone;
     }
-   
+
 }

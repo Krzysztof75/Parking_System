@@ -7,25 +7,27 @@ package classes;
 
 /**
  * reads registration plates of vehicles entering the parking lot
+ *
  * @author Kris
  */
-public class EntryCamera extends Camera{   
+public class EntryCamera extends Camera {
 
     /**
      *
-     * @param dkit
+     * @param ps - ParkingSystem Object
      */
-        public EntryCamera(ParkingSystem dkit){
-        this.parkingSystem = dkit;                         
+    public EntryCamera(ParkingSystem ps) {
+        this.parkingSystem = ps;
     }
-    
+
     /**
      * passes carID to the ParkingSystem object
+     *
      * @param carID - string representing registration plate
      */
     @Override
-    public void send(String carID){
-        System.out.println("Send carID from entry camera: " + carID);
-        parkingSystem.setCarID(this);   
+    public void send(String carID) {
+        ParkingSystem.log.info("Send carID from entry camera: " + carID);
+        parkingSystem.setCarID(this);
     }
 }

@@ -5,6 +5,7 @@
  */
 package classes;
 
+import autParSys.main.ParkingSystemTest;
 import autParkSys.interfaces.iSensor;
 import autParkSys.interfaces.iDataBase;
 import autParkSys.interfaces.Parkable;
@@ -18,16 +19,15 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import org.apache.log4j.Logger;
 
 /**
  * The controlling class of the automated parking system
+ *
  * @author Kris
  */
-
-
 public class ParkingSystem implements Parkable, Serializable {
 
-   
     /* when registering objects such as cameras, gates, displayPanels
      the references to these objects are stored in the arrays specified below
      */
@@ -38,8 +38,10 @@ public class ParkingSystem implements Parkable, Serializable {
     private static int freeSpace = 928;         // number of ramaining free spaces static means variable is shared among other objects
     //private User user;                          // this object will store information of each car entering parking
     private final iDataBase dataBase;                        // reference to database
+    public static Logger log = Logger.getLogger(ParkingSystemTest.class);
 
-     private static volatile ParkingSystem instance = new ParkingSystem();
+    private static volatile ParkingSystem instance = new ParkingSystem();
+
     /**
      *
      */
@@ -49,11 +51,13 @@ public class ParkingSystem implements Parkable, Serializable {
         entryCameras = new ArrayList<>();
         exitCameras = new ArrayList<>();
         dataBase = parkingDB.getInstance();                      // dataBase object invoked in the constructor of ParkingSystem object
+        log.info("Creating ParkingSystem object");
     }
 
-    public static ParkingSystem getInstance(){
-       return instance; 
+    public static ParkingSystem getInstance() {
+        return instance;
     }
+
     /**
      *
      * @param p - object of class implementing Displayable
@@ -61,6 +65,7 @@ public class ParkingSystem implements Parkable, Serializable {
     @Override
     public void registerDisplayPanel(Displayable p) {
         panels.add(p);
+        log.info("Registering panel " + p.getPanelID());
 
     }
 
@@ -71,6 +76,7 @@ public class ParkingSystem implements Parkable, Serializable {
     @Override
     public void removeDisplayPanel(Displayable p) {
         panels.remove(p);
+        log.info("Unregistering panel " + p.getPanelID());
     }
 
     /**
@@ -91,6 +97,7 @@ public class ParkingSystem implements Parkable, Serializable {
     @Override
     public void registerGate(Gate g) {
         gates.add(g);
+        log.info("Registering " + g.getGateID());
     }
 
     /**
@@ -100,6 +107,7 @@ public class ParkingSystem implements Parkable, Serializable {
     @Override
     public void removeGate(Gate g) {
         gates.remove(g);
+        log.info("Unregistering " + g.getGateID());
     }
 
     /**
@@ -110,8 +118,10 @@ public class ParkingSystem implements Parkable, Serializable {
     public void registerCamera(iSensor sensor) {
         if (sensor instanceof EntryCamera) {
             entryCameras.add((EntryCamera) sensor);
+            log.info("Registering " + ((Camera) sensor).getCamID());
         } else if (sensor instanceof ExitCamera) {
             exitCameras.add((ExitCamera) sensor);
+            log.info("Registering " + ((Camera) sensor).getCamID());
             // else throw exception can't register that object as a camera     
         }
     }
@@ -124,8 +134,10 @@ public class ParkingSystem implements Parkable, Serializable {
     public void removeCamera(iSensor sensor) {
         if (sensor instanceof EntryCamera) {
             entryCameras.remove((EntryCamera) sensor);
+            log.info("Unregistering " + ((Camera) sensor).getCamID());
         } else if (sensor instanceof ExitCamera) {
             exitCameras.remove((ExitCamera) sensor);
+            log.info("Unregistering " + ((Camera) sensor).getCamID());
             // else throw exception can't register that object as a camera    
         }
     }
@@ -134,27 +146,29 @@ public class ParkingSystem implements Parkable, Serializable {
      Camera object holds car ID, this value is than passed on to the User constructor
      */
     /**
-     * initiates set of events related to the vehicle entry 
-     * @param camera - object of EntryCamera 
+     * initiates set of events related to the vehicle entry
+     *
+     * @param camera - object of EntryCamera
      */
     public void setCarID(EntryCamera camera) {
 
         User user = new User(camera.getCarID());
         if (this.getDataBase().isSubscriber(user)) {                            // checks if subscribed 
-             System.out.println(camera.getCarID() + " is subscriber");
         } else {                                                                // if not subscribed displays warning message
-           System.out.println("This is paid parking if you don't want to use it leave within 30min");
+            System.out.println("***This is paid parking if you don't want to use it leave within 30min***");
         }
-        System.out.println("User entering the parking " + user);
+        log.info("User entering the parking " + user);
         parkingDB.getTraffic().add(user);
         this.getDataBase().insertTraffic(user);
         openGate(gates.get(0));
         setFreeSpaces(-1);
 
     }
+
     /**
      * initiates set of events related to the vehicle exit
-     * @param camera - object of ExitCamera 
+     *
+     * @param camera - object of ExitCamera
      */
     public void setCarID(ExitCamera camera) {
 
@@ -172,13 +186,13 @@ public class ParkingSystem implements Parkable, Serializable {
                 break;
             }
         }
-      //  user.setTimeOut(currentDate);
+        //  user.setTimeOut(currentDate);
         double balance = getDataBase().calculateCharge(user);
-        if(balance == 0){
+        if (balance == 0) {
             user.setHasPaid(1);
         }
         Subscriber subscriber;
-        if(this.getDataBase().isSubscriber(user)){
+        if (this.getDataBase().isSubscriber(user)) {
             for (Subscriber sub : parkingDB.getSubscribers()) {
                 if (user.getCarID().equals(sub.getCarID())) {
                     subscriber = sub;
@@ -186,43 +200,46 @@ public class ParkingSystem implements Parkable, Serializable {
                     this.getDataBase().updateBalance(subscriber, balance);
                     openGate(gates.get(1));
                     setFreeSpaces(1);
-                  //  parkingDB.exitTraffic(user);
+                    //  parkingDB.exitTraffic(user);
                     break;
                 }
-            }  
-        } else if(user.getHasPaid() == 1){
-           openGate(gates.get(1));
-           setFreeSpaces(-1);
+            }
+        } else if (user.getHasPaid() == 1) {
+            openGate(gates.get(1));
+            setFreeSpaces(-1);
             getDataBase().exitTraffic(user);
-        }else{
-            
-            System.out.println("You need to pay before you can leave the parking");
+        } else {
+
+            System.out.println("***You need to pay before you can leave the parking***");
         }
 
-            for (int i = 0; i < parkingDB.getTraffic().size(); i++) {
-                if (parkingDB.getTraffic().get(i).getCarID().equals(user.getCarID())) {
-                    parkingDB.getTraffic().remove(i);
-                }
+        for (int i = 0; i < parkingDB.getTraffic().size(); i++) {
+            if (parkingDB.getTraffic().get(i).getCarID().equals(user.getCarID())) {
+                parkingDB.getTraffic().remove(i);
             }
-        
+        }
+
     }
+
     /**
-     * writes the information from traffic table to the file the name of the file is the current date+time+.txt
-     * @throws IOException 
+     * writes the information from traffic table to the file the name of the
+     * file is the current date+time+.txt
+     *
+     * @throws IOException
      */
     public void backUpTraffic() throws IOException {
-        
-        ArrayList traffic = parkingDB.getBackUpTraffic();
-        
+
+        ArrayList traffic = parkingDB.readTrafficDB();
+
         DateFormat dateFormat = new SimpleDateFormat("yyyy:MM:dd HH:mm:ss");
         Calendar cal = Calendar.getInstance();
         String currentDate = dateFormat.format(cal.getTime());
-        
+
         String date = currentDate.replace(':', '.').replace(' ', '_');
-  
+
         String tr;
         try {
-            File file = new File( date + ".txt");
+            File file = new File(date + ".txt");
             try (FileWriter fileWriter = new FileWriter(file)) {
                 for (Object traffic1 : traffic) {
                     tr = traffic1.toString();
@@ -233,7 +250,7 @@ public class ParkingSystem implements Parkable, Serializable {
             }
 
         } catch (FileNotFoundException e) {
-            System.out.println("There is a problem writing to a file");
+            log.error("There is a problem writing to a file", e);
         }
     }
 
