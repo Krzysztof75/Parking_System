@@ -155,10 +155,14 @@ public class parkingDB implements iDataBase, Serializable {
             // add new Subscriber to the Subscribers List
             getSubscribers().add(s);
             
+            ParkingSystem.log.info("Subscribing " + s.getFirstName() + " " + s.getLastName());
+            
         } catch (SQLException e) {
-            ParkingSystem.log.error("There is a problem with querry insert Subsriber", e);
+            if(e.getMessage().contains("Duplicate entry")){
+                ParkingSystem.log.info(s.getFirstName() + " " + s.getLastName() + " is already subscribed");
+            } else
+            ParkingSystem.log.error("There is a problem with querry insert Subsriber");
         }
-        ParkingSystem.log.info("Subscribing " + s.getFirstName() + " " + s.getLastName());
         
     }
 
