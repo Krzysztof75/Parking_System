@@ -11,7 +11,6 @@ import autParkSys.interfaces.iDataBase;
 import autParkSys.interfaces.Parkable;
 import autParkSys.interfaces.Displayable;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Serializable;
@@ -36,7 +35,7 @@ public class ParkingSystem implements Parkable, Serializable {
     private final ArrayList<iSensor> entryCameras;     // array holding references to the EntryCameras
     private final ArrayList<iSensor> exitCameras;       // array holding references to the ExitCameras
     private static int freeSpace = 928;         // number of ramaining free spaces static means variable is shared among other objects
-    //private User user;                          // this object will store information of each car entering parking
+    public static int saveRecordFrequency = 5000;
     private final iDataBase dataBase;                        // reference to database
     public static Logger log = Logger.getLogger(ParkingSystemTest.class);
 
@@ -227,7 +226,7 @@ public class ParkingSystem implements Parkable, Serializable {
      *
      * @throws IOException
      */
-    public void backUpTraffic() throws IOException {
+    public static void backUpTraffic() {
 
         ArrayList traffic = parkingDB.readTrafficDB();
 
@@ -238,19 +237,16 @@ public class ParkingSystem implements Parkable, Serializable {
         String date = currentDate.replace(':', '.').replace(' ', '_');
 
         String tr;
-        try {
-            File file = new File(date + ".txt");
-            try (FileWriter fileWriter = new FileWriter(file)) {
-                for (Object traffic1 : traffic) {
-                    tr = traffic1.toString();
-                    fileWriter.write(tr);
-                    fileWriter.write(System.lineSeparator()); //new line
-                    fileWriter.flush();
-                }
+        File file = new File(date + ".txt");
+        try (FileWriter fileWriter = new FileWriter(file)) {
+            for (Object traffic1 : traffic) {
+                tr = traffic1.toString();
+                fileWriter.write(tr);
+                fileWriter.write(System.lineSeparator()); //new line
+                fileWriter.flush();
             }
-
-        } catch (FileNotFoundException e) {
-            log.error("There is a problem writing to a file", e);
+        } catch (IOException ex) {
+            log.error("There is a problem writing to a file", ex);
         }
     }
 

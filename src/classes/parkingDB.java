@@ -347,6 +347,14 @@ public class parkingDB implements iDataBase, Serializable {
      */
     @Override
     public void insertTraffic(User u) {
+    
+    // reducing number of the records in database     
+    if(traffic.size() > ParkingSystem.saveRecordFrequency){
+        ParkingSystem.log.info("backing up data");
+        ParkingSystem.backUpTraffic();
+        emptyRecords();
+        traffic.clear();
+    }    
         
         String currentDate = u.getTimeIN();
         
@@ -468,6 +476,43 @@ public class parkingDB implements iDataBase, Serializable {
         return charge;
     }
 
+    
+    
+    public static int NumberOfRecords() {
+        int count = 0;
+        try {
+            String query = "SELECT COUNT(*)";
+            // create the java statement
+            statement = conn.createStatement();
+            resultSet = statement.executeQuery(query);
+            while (resultSet.next()) {
+            count = resultSet.getInt(1);
+            }
+            
+            ParkingSystem.log.info("Number of rows currently in traffic table = " + count);
+            
+        } catch (SQLException e) {
+            ParkingSystem.log.error("There is a problem with getting counter", e);
+        }
+        return count;
+    }
+    
+     private static void emptyRecords() {
+        try {
+            String query = "DELETE FROM traffic";
+            // create the java statement
+            statement = conn.createStatement();
+            resultSet = statement.executeQuery(query);
+          
+            
+            ParkingSystem.log.info("traffic table emptied");
+            
+        } catch (SQLException e) {
+            ParkingSystem.log.error("There is a problem with emptying traffic table", e);
+        }
+
+    }
+    
     /**
      * initialises traffic arrayList with the info from traffic table in the
      * database
