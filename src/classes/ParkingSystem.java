@@ -6,10 +6,10 @@
 package classes;
 
 import autParSys.main.ParkingSystemTest;
-import autParkSys.interfaces.iSensor;
-import autParkSys.interfaces.iDataBase;
-import autParkSys.interfaces.Parkable;
-import autParkSys.interfaces.Displayable;
+import interfaces.iSensor;
+import interfaces.iDataBase;
+import interfaces.Parkable;
+import interfaces.Displayable;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -18,6 +18,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 
 /**
@@ -35,7 +36,7 @@ public class ParkingSystem implements Parkable, Serializable {
     private final ArrayList<iSensor> entryCameras;     // array holding references to the EntryCameras
     private final ArrayList<iSensor> exitCameras;       // array holding references to the ExitCameras
     private static int freeSpace = 928;         // number of ramaining free spaces static means variable is shared among other objects
-    public static int saveRecordFrequency = 5000;
+    public static int saveRecordFrequency = 1000;
     private final iDataBase dataBase;                        // reference to database
     public static Logger log = Logger.getLogger(ParkingSystemTest.class);
 
@@ -50,6 +51,7 @@ public class ParkingSystem implements Parkable, Serializable {
         entryCameras = new ArrayList<>();
         exitCameras = new ArrayList<>();
         dataBase = parkingDB.getInstance();                      // dataBase object invoked in the constructor of ParkingSystem object
+         BasicConfigurator.configure();
         log.info("Creating ParkingSystem object");
     }
 
@@ -152,12 +154,12 @@ public class ParkingSystem implements Parkable, Serializable {
     public void setCarID(EntryCamera camera) {
 
         User user = new User(camera.getCarID());
-        if (this.getDataBase().isSubscriber(user)) {                            // checks if subscribed 
-        } else {                                                                // if not subscribed displays warning message
+        if (!this.getDataBase().isSubscriber(user)) {                            // checks if subscribed if not display warning message                                                                // if not subscribed displays warning message
             System.out.println("***This is paid parking if you don't want to use it leave within 30min***");
         }
         log.info("User entering the parking " + user);
         parkingDB.getTraffic().add(user);
+        // add the user to the traffic array of the ParkingDB so that it contains users currently present at the parking lot
         this.getDataBase().insertTraffic(user);
         openGate(gates.get(0));
         setFreeSpaces(-1);
@@ -212,6 +214,7 @@ public class ParkingSystem implements Parkable, Serializable {
             System.out.println("***You need to pay before you can leave the parking***");
         }
 
+        // remove the user from the traffic array in ParkingDB so that it only stores the users currently present at the parking lot
         for (int i = 0; i < parkingDB.getTraffic().size(); i++) {
             if (parkingDB.getTraffic().get(i).getCarID().equals(user.getCarID())) {
                 parkingDB.getTraffic().remove(i);
@@ -228,26 +231,32 @@ public class ParkingSystem implements Parkable, Serializable {
      */
     public static void backUpTraffic() {
 
-        ArrayList traffic = parkingDB.readTrafficDB();
+        ArrayList traffic = parkingDB.readTrafficDB(); 
 
         DateFormat dateFormat = new SimpleDateFormat("yyyy:MM:dd HH:mm:ss");
         Calendar cal = Calendar.getInstance();
         String currentDate = dateFormat.format(cal.getTime());
 
+        // format current date so that it can be used as a file name
         String date = currentDate.replace(':', '.').replace(' ', '_');
 
         String tr;
         File file = new File(date + ".txt");
         try (FileWriter fileWriter = new FileWriter(file)) {
             for (Object traffic1 : traffic) {
+                User user = (User)traffic1;
+                // only save records of the vehicles which already left the parking
+                if(user.getTimeOut()!= null){
                 tr = traffic1.toString();
                 fileWriter.write(tr);
                 fileWriter.write(System.lineSeparator()); //new line
                 fileWriter.flush();
+                }
             }
         } catch (IOException ex) {
             log.error("There is a problem writing to a file", ex);
         }
+        log.info("backing up data");
     }
 
     /**

@@ -5,7 +5,7 @@
  */
 package classes;
 
-import autParkSys.interfaces.iSensor;
+import interfaces.iSensor;
 
 /**
  * abstract class implements iSensor

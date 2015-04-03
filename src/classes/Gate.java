@@ -5,7 +5,7 @@
  */
 package classes;
 
-import autParkSys.interfaces.Parkable;
+import interfaces.Parkable;
 
 /**
  * object of this class represent a simple gate mechanism which lifts up when

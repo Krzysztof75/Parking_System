@@ -5,7 +5,7 @@
  */
 package classes;
 
-import autParkSys.interfaces.iDataBase;
+import interfaces.iDataBase;
 import java.io.Serializable;
 import java.sql.*;
 import java.util.ArrayList;
@@ -89,6 +89,7 @@ public class parkingDB implements iDataBase, Serializable {
      * this method establishes connection with the database
      *
      */
+
     @Override
     public final void connect() {
         try {
@@ -106,6 +107,7 @@ public class parkingDB implements iDataBase, Serializable {
     /**
      * method disconnecting from the database
      */
+    
     @Override
     public void disconnect() {
         try {
@@ -348,12 +350,15 @@ public class parkingDB implements iDataBase, Serializable {
     @Override
     public void insertTraffic(User u) {
     
-    // reducing number of the records in database     
-    if(traffic.size() > ParkingSystem.saveRecordFrequency){
-        ParkingSystem.log.info("backing up data");
+    // backing up the data from traffic table once the count of records reaches specified number (saveRecordFrequency)
+    // records with DateOut not null are saved to the file, records with DateOut null remain in the database as it means
+    // that the vehicle is still at the parking lot and those records are still needed
+    if(NumberOfRecords() >= ParkingSystem.saveRecordFrequency){
         ParkingSystem.backUpTraffic();
-        emptyRecords();
+        emptyTrafficRecords();
+        
         traffic.clear();
+       
     }    
         
         String currentDate = u.getTimeIN();
@@ -406,6 +411,8 @@ public class parkingDB implements iDataBase, Serializable {
             String sql = "UPDATE traffic SET DateOut = '" + u.getTimeOut() + "',balance = '" + u.getBalance() + "',hasPaid = '" + u.getHasPaid() + "'WHERE CarID ='" + u.getCarID() + "'";
             statement.executeUpdate(sql);
             ParkingSystem.log.info("Updating exit time, balance and boolean hasPaid in traffic table");
+            
+            
             
         } catch (SQLException e) {
             ParkingSystem.log.error("There is a problem with balance update querry", e);
@@ -481,7 +488,7 @@ public class parkingDB implements iDataBase, Serializable {
     public static int NumberOfRecords() {
         int count = 0;
         try {
-            String query = "SELECT COUNT(*)";
+            String query = "SELECT COUNT(*) FROM traffic";
             // create the java statement
             statement = conn.createStatement();
             resultSet = statement.executeQuery(query);
@@ -497,15 +504,33 @@ public class parkingDB implements iDataBase, Serializable {
         return count;
     }
     
-     private static void emptyRecords() {
+    @Override
+     public void emptyTrafficRecords() {
+        try {
+            String query = "DELETE FROM traffic WHERE DateOut IS NOT NULL";
+            // create the java statement
+            statement = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+                    ResultSet.CONCUR_UPDATABLE);
+            statement.executeUpdate(query);
+          
+            ParkingSystem.log.info("deleting records with dateOut null from traffic table");
+            
+        } catch (SQLException e) {
+            ParkingSystem.log.error("There is a problem with deleting data from traffic table", e);
+        }
+
+    }
+     
+    @Override
+      public void emptyAllTrafficRecords() {
         try {
             String query = "DELETE FROM traffic";
             // create the java statement
-            statement = conn.createStatement();
-            resultSet = statement.executeQuery(query);
+            statement = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+                    ResultSet.CONCUR_UPDATABLE);
+            statement.executeUpdate(query);
           
-            
-            ParkingSystem.log.info("traffic table emptied");
+            ParkingSystem.log.info("deleting all records from traffic table");
             
         } catch (SQLException e) {
             ParkingSystem.log.error("There is a problem with emptying traffic table", e);
@@ -560,7 +585,6 @@ public class parkingDB implements iDataBase, Serializable {
                 int hasPaid = resultSet.getInt("hasPaid");
                 User user = new User(carID, DateIn, DateOut, balance, hasPaid);
                 t.add(user);
-                ParkingSystem.log.info("reading values from traffic table");
             }
             
         } catch (SQLException e) {

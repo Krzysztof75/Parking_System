@@ -5,16 +5,16 @@
  */
 package autParSys.main;
 
-import autParkSys.interfaces.Displayable;
+import interfaces.Displayable;
 import classes.Camera;
 import static classes.CameraFactory.createCamera;
 import classes.DisplayPanel;
 import classes.Gate;
 import classes.ParkingSystem;
 import classes.Subscriber;
+import classes.User;
+import classes.parkingDB;
 import java.io.IOException;
-import org.apache.log4j.BasicConfigurator;
-import org.apache.log4j.Logger;
 
 /**
  *
@@ -47,7 +47,6 @@ public class ParkingSystemTest {
          Setting up the Parking system
          Forming all the system elements
          */
-        BasicConfigurator.configure();
         ParkingSystem parkingSystem = ParkingSystem.getInstance();
 
         Camera camEntry = createCamera("Entry", parkingSystem);
@@ -73,8 +72,8 @@ public class ParkingSystemTest {
         parkingSystem.registerCamera(camEntry);
         parkingSystem.registerCamera(camExit);
 
-      //  This part is just for the simulation purposes only
-        //  Registering Subscriber
+        //  This part is just for the simulation purposes only
+        //  Registering Subscribers
         Subscriber sub1 = new Subscriber("Krzysztof", "Gilewski", "04LK298", "090786876567", 0.0);
         Subscriber sub2 = new Subscriber("Hardik", "Thakkar", "11DP214", "8764563564554", 0.0);
         Subscriber sub3 = new Subscriber("Dean", "McMahon", "12HG125", "862542545426882", 0.0);
@@ -82,7 +81,7 @@ public class ParkingSystemTest {
         Subscriber sub5 = new Subscriber("Tony", "McMarron", "LKP46789", "787575576567675", 0.0);
         Subscriber sub6 = new Subscriber("Jimmy", "NcNally", "01HF444", "58585586585668586", 0.0);
         Subscriber sub7 = new Subscriber("Robert", "DeNiro", "02YL456", "7867568758548585", 0.0);
-        
+
         parkingSystem.getDataBase().registerSubscriber(sub1);
         parkingSystem.getDataBase().registerSubscriber(sub2);
         parkingSystem.getDataBase().registerSubscriber(sub3);
@@ -92,58 +91,46 @@ public class ParkingSystemTest {
         parkingSystem.getDataBase().registerSubscriber(sub7);
 
         //  vehicles enter the parking
-        
-        camEntry.read(incomingTrafficEntry1);
-        System.out.println();
-        camEntry.read(incomingTrafficEntry2);
-        System.out.println();
-        camEntry.read(incomingTrafficEntry3);
-        System.out.println();
-
+//        camEntry.read(incomingTrafficEntry1);
+//        System.out.println();
+//        camEntry.read(incomingTrafficEntry2);
+//        System.out.println();
+//        camEntry.read(incomingTrafficEntry3);
+//        System.out.println();
 //        remove subscriber sub3 
-        
-        parkingSystem.getDataBase().removeSubscriber(sub3);
-        
-        // vehicles exiting the traffic
-        camExit.read(outgoingTraffic1);
-        System.out.println();
-      
-        camExit.read(outgoingTraffic2);
-        System.out.println();
-        
-        camExit.read(outgoingTraffic3);
-        System.out.println();
-        
+//        parkingSystem.getDataBase().removeSubscriber(sub3);
+//        vehicles exiting the traffic
+//        camExit.read(outgoingTraffic1);
+//        System.out.println();
+//      
+//        camExit.read(outgoingTraffic2);
+//        System.out.println();
+//        
+//        camExit.read(outgoingTraffic3);
+//        System.out.println();
+
 // first 30 min free of charge - wait at least this much to see the charge being calculated  
-        
 //    Paying for single user if not subscriber      
-//      User car = new User("11DD212");
+      User car = new User("05JY667");
 //     find the rigt user in the arraylist tarffic       
-//        for(int i = 0; i < parkingDB.getTraffic().size(); i++){
-//            if(parkingDB.getTraffic().get(i).getCarID().equals(car.getCarID())){
-//            car = parkingDB.getTraffic().get(i);
-//        }
-//        }
-//        double charge = parkingSystem.getDataBase().calculateCharge(car);
-//        car.setBalance(charge);
-//        parkingSystem.getDataBase().updateBalance(car);
-        
+        for(int i = 0; i < parkingDB.getTraffic().size(); i++){
+            if(parkingDB.getTraffic().get(i).getCarID().equals(car.getCarID())){
+            car = parkingDB.getTraffic().get(i);
+        }
+        }
+        double charge = parkingSystem.getDataBase().calculateCharge(car);
+        car.setBalance(charge);
+        parkingSystem.getDataBase().updateBalance(car);
 // run it to exit single vehicle (make sure the vehicle is still at the parking lot
 //      Single vehicle leaves the parking (must pay before)
-        
-//          camExit.read("11DD212");
-        
+          camExit.read("05JY667");
 //     printing out the users from the traffic arraylist
 //        for(User u : parkingDB.getTraffic())
 //            System.out.println(u);       
 //        System.out.println();
-        
 // run this piece of code to write the content of the traffic table to the file
-//        try{   
-//            parkingSystem.backUpTraffic();
-//        } catch (IOException ex) {
-//         ParkingSystem.log.info("Problem writing backup to the file" + ex.getMessage());   
-//        }
+//            ParkingSystem.backUpTraffic();
+        // ParkingSystem.log.info("Problem writing backup to the file" + ex.getMessage()); 
         parkingSystem.getDataBase().disconnect();
 
     }

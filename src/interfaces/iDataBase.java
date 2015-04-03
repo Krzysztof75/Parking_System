@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package autParkSys.interfaces;
+package interfaces;
 
 import classes.Subscriber;
 import classes.User;
@@ -64,6 +64,10 @@ public interface iDataBase {
      */
     double updateBalance(Subscriber s, double charge);
 
+    void emptyTrafficRecords();
+    
+    void emptyAllTrafficRecords();
+    
     /**
      *
      * @param u

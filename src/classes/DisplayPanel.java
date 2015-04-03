@@ -5,7 +5,7 @@
  */
 package classes;
 
-import autParkSys.interfaces.Displayable;
+import interfaces.Displayable;
 
 /**
  * displays the current number of free spaces at the parking lot and messages
